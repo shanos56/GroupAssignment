@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>50</y>
+      <y>80</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -27,34 +27,11 @@
      <string>Username</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>130</y>
-      <width>59</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Password</string>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>40</y>
-      <width>241</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>120</y>
+      <y>70</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -98,6 +75,9 @@
     <property name="text">
      <string>Online</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QRadioButton" name="radioButton_2">
     <property name="geometry">
@@ -122,6 +102,13 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFIle">
+    <property name="title">
+     <string>FIle</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFIle"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -132,23 +119,44 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections>
   <connection>
-   <sender>radioButton_2</sender>
-   <signal>toggled(bool)</signal>
+   <sender>radioButton</sender>
+   <signal>clicked()</signal>
    <receiver>radioButton_2</receiver>
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>208</y>
+     <x>139</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel">
-     <x>275</x>
-     <y>208</y>
+     <x>280</x>
+     <y>212</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>radioButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>340</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>215</y>
     </hint>
    </hints>
   </connection>

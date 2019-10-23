@@ -43,6 +43,7 @@ class MinimumValueValidator : public UserPropertyValidator{
 
 public:
     MinimumValueValidator(int val);
+
     MinimumValueValidator(double val);
     /**
      * @brief operator ()

@@ -10,6 +10,9 @@
 namespace core {
 class Asset : public RegisteredEntity
 {
+
+    Q_OBJECT
+
     /**
      * @brief type
      * a reference (not necessarily a C++ reference) to the AssetType of this Asset.
@@ -17,7 +20,7 @@ class Asset : public RegisteredEntity
      * however, there must be an accessor type() that returns an AssetType rather than QObject.
      * @note an id would be a good way to indicate the type of asset
      */
-    AssetType type;
+    std::shared_ptr<RegisteredEntity> assetType;
 
     /**
      * @brief serialNo
@@ -70,15 +73,15 @@ class Asset : public RegisteredEntity
      * an object without a Custodian and update the value once it has been determined.
      * @note an id would be a good choice
      */
-    Custodian custodian;
+    std::shared_ptr<Custodian> custodian;
 
     /**
      * @brief userProperties
      */
-    std::map<QString,UserProperty> userProperties;
+    std::map<QString,std::shared_ptr<UserProperty>> userProperties;
 
 public:
-    Asset();
+    explicit Asset(QObject * parent);
     /**
      * @brief Asset
      * since the class is derived from QObject, it should have the common QObject constructor
@@ -89,7 +92,40 @@ public:
      * @param parent
      * parent
      */
-    Asset( QString id, QObject *parent);
+    explicit Asset( QString id, QObject *parent);
+
+    Asset( QString id, std::shared_ptr<RegisteredEntity>);
+
+
+    void purchaseAsset (QDateTime time);
+    QDateTime getPurchaseDate();
+
+    void setPurchasePrice(TypedUserProperty<double> price);
+    TypedUserProperty<double> getPrice();
+
+    void setModel(QString model);
+    QString getModel();
+
+    void setBrand (QString  name);
+    QString getBrand();
+
+    void sellAsset(QDateTime time);
+    QDateTime getDisposalDate();
+
+
+    void setSerialNo(QString serial);
+    QString getSerialNo();
+
+    std::shared_ptr<RegisteredEntity> getAssetType();
+    bool setAssetType(std::shared_ptr<RegisteredEntity> type);
+
+    void setCustodian(std::shared_ptr<Custodian> custodian);
+    std::shared_ptr<Custodian> getCustodian();
+
+    void addUserProperty(QString name,std::shared_ptr<UserProperty> property);
+    std::shared_ptr<UserProperty> getUserProperty(QString name);
+
+
 
 public slots:
     /**
@@ -101,6 +137,7 @@ public slots:
      * @param oldValue
      */
     void userPropertyChanged( QVariant newValue, QVariant oldValue);
+
 
 };
 }

@@ -2,6 +2,7 @@
 #define ASSETTYPE_H
 #include <QVector>
 #include "registeredentity.h"
+#include "userpropertydefinition.h"
 
 #include "asset.h"
 namespace core {
@@ -108,7 +109,7 @@ public:
      * property defintion
      * nullptr
      */
-    UserPropertyDefintion getPropertyDefintion(QString name);
+    std::shared_ptr<UserPropertyDefintion> getPropertyDefintion(QString name);
     /**
      * @brief newInstance
      * Creates and returns new Asset object that is linked to this AssetType as one of its instances.

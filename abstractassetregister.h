@@ -21,6 +21,11 @@ protected:
      * instance of AssetRegister
      */
     static std::shared_ptr<AbstractAssetRegister> _instance;
+
+    template<class T>
+    static T type;
+
+
     /**
      * @brief _entityFactory
      * pointer to abstract entity factory
@@ -57,7 +62,12 @@ Everywhere else in the application may simply call: AbstractAssetRegister::insta
      template<class T>
      static std::shared_ptr<T> instance();
 
+     template<class T>
+     static void setType(T type);
 
+
+     template<class T>
+     static T getType();
 
     /**
      * @brief username
