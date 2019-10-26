@@ -25,7 +25,7 @@ class AssetType : public RegisteredEntity
      * You MAY make use of the standard QObject hierarchy to implement this; however, there must still
      * be an accessor called instances() that returns only Asset objects (as opposed to all QObjects).
      */
-    QVector<Asset> _instances;
+    QVector<std::shared_ptr<Asset>> _instances;
 
     /**
      * @brief propertyDefinitions
@@ -40,7 +40,7 @@ class AssetType : public RegisteredEntity
      * UserPropertyDefinition by name, and mutators that allow the addition or update of a
      * UserPropertyDefinition by passing in the definition object, and the removal of an object by passing in the name.
      */
-    QMap<QString,UserPropertyDefinition> propertyDefinitions;
+    QMap<QString,std::shared_ptr<UserPropertyDefinition>> propertyDefinitions;
 
 
 public:
@@ -70,7 +70,7 @@ public:
      * true - successfully added property definition
      * false - property definition name already exists
      */
-    bool addPropertyDefinition (QString name,UserPropertyDefinition propertyDefinition);
+    bool addPropertyDefinition (QString name,std::shared_ptr<UserPropertyDefinition> propertyDefinition);
 
     /**
      * @brief updatePropertyDefinition
@@ -83,7 +83,7 @@ public:
      * true - successfully updated property definition
      * false - property definition name already exists
      */
-    bool updatePropertyDefintion (QString name,UserPropertyDefinition propertyDefinition);
+    bool updatePropertyDefintion (QString name,std::shared_ptr<UserPropertyDefinition> propertyDefinition);
     /**
      * @brief removePropertyDefinition
      * deletes a property definition
@@ -98,7 +98,7 @@ public:
      * @return
      * vector(array) of property definitions
      */
-    QVector<UserPropertyDefinition> getPropertyDefinition();
+    QVector<std::shared_ptr<UserPropertyDefinition>> getPropertyDefinition();
 
     /**
      * @brief getPropertyDefintion
@@ -109,20 +109,49 @@ public:
      * property defintion
      * nullptr
      */
-    std::shared_ptr<UserPropertyDefintion> getPropertyDefintion(QString name);
+    std::shared_ptr<UserPropertyDefinition> getPropertyDefintion(QString name);
     /**
      * @brief newInstance
      * Creates and returns new Asset object that is linked to this AssetType as one of its instances.
      * @return
      */
-    Asset newInstance();
+    std::shared_ptr<Asset> newInstance();
     /**
      * @brief instances
      * gets all asset instances connected to this asset type
      * @return
      * vector, array of assets
      */
-    QVector<Asset> instances ();
+    QVector<std::shared_ptr<Asset>> instances ();
+
+    /**
+       * @brief setDateTime
+       * sets the latest date time
+       * @param date
+       * date to set otherwise use current date
+       * @return
+       * true - successfully set date time
+       * false - invalid datetime
+       */
+      bool setDateTime(QDateTime date = QDateTime::currentDateTime());
+    /**
+       * @brief setLastEditedBy
+       * set the last time user was edited
+       * @param username
+       * name of last user
+       * @return
+       * true - successfully set user
+       * false - invalid user
+       */
+      bool setLastEditedBy(QString username);
+    /**
+     * @brief getId
+     * fetches entities id
+     * @return
+     *  entities id
+     */
+    QString getId ();
+
 
 public slots:
     /**
@@ -136,7 +165,7 @@ public slots:
      * signal when they are being deleted.
      * @param instance
      */
-    void instanceDestroyed( Asset  instance);
+    void instanceDestroyed( std::shared_ptr<Asset>  instance);
 
 
 };

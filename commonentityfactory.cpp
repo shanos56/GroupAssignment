@@ -28,20 +28,17 @@ std::shared_ptr<Custodian> CommonEntityFactory::createCustodian( QString id, QMa
     std::shared_ptr<Custodian> custodian {new core::Custodian(id,parent)};
 
     for (auto i = parameters.begin(); i != parameters.end(); i++) {
-        if (i.key().compare("PhoneNumber")) {
-            createPropertyDefinition()
-            custodian.get()->setPhoneNumber(createPropertyDefinition()
-
+         if (i.key().compare("DateTime") == 0) {
+            custodian.get()->setDateTime(i.value().toDateTime());
+        } else if (i.key().compare("lastEditedBy") == 0) {
+            custodian.get()->setLastEditedBy(i.value().toString());
         }
-
     }
 
-}
-
-TypedUserProperty CommonEntityFactory::createTypedUserProperty () {
-
+    return custodian;
 
 }
+
 /**
 
   @brief
@@ -54,7 +51,19 @@ TypedUserProperty CommonEntityFactory::createTypedUserProperty () {
     @param paramaters optional map of parameters for AssetType
     @param parent optional pointer to parent of AssetType
   */
-std::shared_ptr<AssetType> CommonEntityFactory::createAssetType( QString id, QMap <QString, QVariant> parameters, QObject *parent);
+std::shared_ptr<AssetType> CommonEntityFactory::createAssetType( QString id, QMap <QString, QVariant> parameters, QObject *parent){
+
+    std::shared_ptr<AssetType> assetType {new AssetType(id,parent)};
+    for (auto i = parameters.begin(); i != parameters.end(); i++) {
+         if (i.key().compare("DateTime") == 0) {
+            assetType.get()->setDateTime(i.value().toDateTime());
+         } else if (i.key().compare("lastEditedBy") == 0) {
+             assetType.get()->setLastEditedBy(i.value().toString());
+         }
+    }
+
+    return assetType;
+}
 
 /**
 
@@ -70,7 +79,25 @@ std::shared_ptr<AssetType> CommonEntityFactory::createAssetType( QString id, QMa
     @param paramaters optional map of parameters for Asset
     @param parent optional pointer to parent of Asset
   */
-std::shared_ptr<Asset> CommonEntityFactory::createAsset( std::shared_ptr<AssetType> type, QString id, QMap <QString, QVariant> parameters, QObject *parent);
+std::shared_ptr<Asset> CommonEntityFactory::createAsset( std::shared_ptr<AssetType> type, QString id, QMap <QString, QVariant> parameters, QObject *parent){
+
+    std::shared_ptr<Asset> a {new Asset(id,parent)};
+    a->setAssetType(type);
+    for (auto it = parameters.begin(); it != parameters.end() ; it++) {
+        if (it.key().compare("Username") == 0)
+            a.get()->setLastEditedBy(it.value().toString());
+        else if (it.key().compare("PurchaseDate") == 0)
+             a.get()->setDateTime(it.value().toDateTime());
+        else if (it.key().compare("Model") == 0) {
+            a.get()->setModel(it.value().toString());
+        }else if (it.key().compare("Brand") == 0) {
+            a->setBrand(it.value().toString());
+        }else if (it.key().compare("Model") == 0)
+            a->setModel(it.value().toString());
+    }
+    return a;
+
+}
 /**
   @brief
   Instantiates and returns a (pointer to a)
@@ -84,7 +111,14 @@ construct the object.
     @param paramaters [optional] map of parameters for UserPropertyDefinition
     @param parent [optional] pointer to parent of UserPropertyDefinition
 */
-std::shared_ptr<UserPropertyDefinition> CommonEntityFactory::createPropertyDefinition( QString id, QMap<QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+std::shared_ptr<UserPropertyDefinition> CommonEntityFactory::createPropertyDefinition( QString id, QMap<QString, QVariant> parameters, QObject *parent) {
+    std::shared_ptr<UserPropertyDefinition> a(new UserPropertyDefinition(id, parent));
+    for (auto it = parameters.begin(); it != parameters.end() ; it++) {
+        if (it.key().compare("default") == 0)
+            a.get()->setValue(it.value());
+    }
+    return a;
+}
 
 /**
   @brief
@@ -100,4 +134,23 @@ other values deemed necessary to correctly construct the object.
     @param parent [optional] pointer to parent of UserProperty
 */
 
-std::shared_ptr<UserProperty> CommonEntityFactory::createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr );
+std::shared_ptr<UserProperty> CommonEntityFactory::createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters, QObject *parent){
+    auto it = parameters.find("type");
+    std::shared_ptr<UserProperty> a(new TypedUserProperty<QString>(id,definition,parent));
+    QString type = "QString";
+    if (it != parameters.end()) {
+        if (it.value().toString().compare("Double") == 0) {
+            type = "Double";
+            std::shared_ptr<UserProperty> a {new TypedUserProperty<double>(id,definition,parent)};
+        } else if (it.value().toString().compare("Int") == 0) {
+            type = "Int";
+            std::shared_ptr<UserProperty> a {new TypedUserProperty<int>(id,definition,parent)};
+        }
+    }
+    for (auto it = parameters.begin(); it != parameters.end();it++) {
+        if (it.key().compare("value") == 0){
+             a->setValue(it.value());
+        }
+    }
+    return a;
+}

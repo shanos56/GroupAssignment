@@ -110,7 +110,6 @@ bool AssetRegister::deleteEntity(QString id){
     for (auto i = this->_entities.begin(); i != this->_entities.end(); i++) {
 
        if ( i->get()->getId().compare(id) == 0) {
-           i->get()->deleteLater();
            i->reset();
            this->_entities.erase(i);
        }
@@ -164,4 +163,3 @@ bool AssetRegister::restore(QMap<QString, QVariant> options) {
 
 
 
-static void resetSingleton();

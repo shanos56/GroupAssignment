@@ -5,15 +5,12 @@ using namespace core;
 Asset::Asset(QString id, QObject *parent)
 {
     this->id = id;
-
-}
-
-
-Asset::Asset(QObject *parent)
-{
+    this->setParent(parent);
 
 
 }
+
+
 
 Asset::Asset(QString id, std::shared_ptr<RegisteredEntity> assetType) {
     this->id = id;
@@ -21,8 +18,7 @@ Asset::Asset(QString id, std::shared_ptr<RegisteredEntity> assetType) {
 }
 
 
-void Asset::purchaseAsset (QDateTime time) {
-
+bool Asset::purchaseAsset (QDateTime time) {
     this->purchaseDate = time;
 }
 QDateTime Asset::getPurchaseDate() {
@@ -30,30 +26,34 @@ QDateTime Asset::getPurchaseDate() {
     return this->purchaseDate;
 }
 
-void Asset::setPurchasePrice(TypedUserProperty<double> price){
+bool Asset::setPurchasePrice(TypedUserProperty<double> price){
     this->purchasePrice = price;
+    return true;
 
 }
 TypedUserProperty<double> Asset::getPrice(){
     return purchasePrice;
 }
 
-void Asset::setModel(QString model){
+bool Asset::setModel(QString model){
     this->model = model;
+    return true;
 }
 QString Asset::getModel(){
     return model;
 }
 
-void Asset::setBrand (QString  name){
+bool Asset::setBrand (QString  name){
     this->brand = name;
+    return true;
 }
 QString Asset::getBrand(){
     return this->brand;
 }
 
-void Asset::sellAsset(QDateTime time){
+bool Asset::sellAsset(QDateTime time){
     this->disposalDate = time;
+    return true;
 
 }
 QDateTime Asset::getDisposalDate(){
@@ -61,8 +61,9 @@ QDateTime Asset::getDisposalDate(){
 }
 
 
-void Asset::setSerialNo(QString serial){
+bool Asset::setSerialNo(QString serial){
     this->serialNo = serial;
+    return true;
 
 }
 QString Asset::getSerialNo(){
@@ -75,18 +76,22 @@ std::shared_ptr<RegisteredEntity> Asset::getAssetType(){
 }
 bool Asset::setAssetType(std::shared_ptr<RegisteredEntity> type){
     this->assetType = type;
+    return true;
 }
 
-void Asset::setCustodian(std::shared_ptr<Custodian> custodian){
+bool Asset::setCustodian(std::shared_ptr<Custodian> custodian){
     this->custodian = custodian;
+    return true;
 
 }
 std::shared_ptr<Custodian> Asset::getCustodian(){
     return this->custodian;
 }
 
-void Asset::addUserProperty(QString name,std::shared_ptr<UserProperty> property){
-    this->userProperties.insert(std::pair<QString,std::shared_ptr<UserProperty>>(name,property));
+bool Asset::addUserProperty(QString name,std::shared_ptr<UserProperty> property){
+    auto pair = this->userProperties.insert(std::pair<QString,std::shared_ptr<UserProperty>>(name,property));
+
+    return pair.second;
 }
 
 std::shared_ptr<UserProperty> Asset::getUserProperty(QString name){
@@ -97,3 +102,44 @@ std::shared_ptr<UserProperty> Asset::getUserProperty(QString name){
         return nullptr;
     }
 }
+
+void Asset::userPropertyChanged(QVariant newValue, QVariant oldValue){
+
+}
+
+/**
+   * @brief setDateTime
+   * sets the latest date time
+   * @param date
+   * date to set otherwise use current date
+   * @return
+   * true - successfully set date time
+   * false - invalid datetime
+   */
+bool Asset::setDateTime(QDateTime date) {
+    this->purchaseDate = date;
+    return true;
+}
+/**
+   * @brief setLastEditedBy
+   * set the last time user was edited
+   * @param username
+   * name of last user
+   * @return
+   * true - successfully set user
+   * false - invalid user
+   */
+bool Asset::setLastEditedBy(QString username) {
+    this->lastEditedBy = username;
+    return true;
+}
+/**
+ * @brief getId
+ * fetches entities id
+ * @return
+ *  entities id
+ */
+QString Asset::getId () {
+    return id;
+}
+

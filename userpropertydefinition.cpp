@@ -2,9 +2,9 @@
 #include "typeduserproperty.h"
 
 using namespace core;
-UserPropertyDefinition::UserPropertyDefinition(QObject *parent) : QObject(parent)
+UserPropertyDefinition::UserPropertyDefinition(QString id, QObject *parent) : QObject(parent)
 {
-
+this->id = id;
 }
 
 
@@ -47,13 +47,15 @@ std::shared_ptr<UserProperty> UserPropertyDefinition::newProperty(QObject *paren
 
     std::shared_ptr<UserPropertyDefinition>th (this);
 
-    if (dataType == types::Qstring)
+    if (dataType == types::Qstring) {
         return std::shared_ptr<UserProperty>{new TypedUserProperty<QString>(th)};
-    if (dataType == types::Int)
+    } else if (dataType == types::Int)
         return std::shared_ptr<UserProperty>{new TypedUserProperty<int>(th)};
-    if (dataType == types::Double)
+    else if (dataType == types::Double)
         return std::shared_ptr<UserProperty>{new TypedUserProperty<double>(th)};
-
+    else {
+        return nullptr;
+    }
 
 
 }
@@ -79,7 +81,7 @@ std::tuple<bool, QString> UserPropertyDefinition::validate( std::shared_ptr<User
     return std::make_tuple(true,QString(""));
 }
 
-bool UserPropertyDefinition::setValidator (QString name, std::shared_ptr<UserPropertyValidator> validator) {
+bool UserPropertyDefinition::addValidator (QString name, std::shared_ptr<UserPropertyValidator> validator) {
 
     if (validators.contains(name))
         return false;
@@ -114,4 +116,36 @@ int UserPropertyDefinition::getPrecision () {
     else {
         return 0;
     }
+}
+
+QString UserPropertyDefinition::getId() {
+    return id;
+}
+
+
+/**
+ * @brief getId
+ * fetches id
+ * @return
+ * gets id of object
+ */
+QString getId();
+/**
+ * @brief setValue
+ * @param value
+ * @return
+ * true - successfully set value
+ * false - failed to set value
+ */
+bool UserPropertyDefinition::setValue (QVariant value) {
+    this->_default = value;
+}
+/**
+ * @brief getValue
+ *   retrieves value
+ * @return
+ * value to be returned
+ */
+QVariant UserPropertyDefinition::getValue() {
+    return _default;
 }

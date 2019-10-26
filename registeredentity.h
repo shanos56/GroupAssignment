@@ -4,11 +4,10 @@
 #include <QObject>
 #include <QDateTime>
 namespace core {
-class RegisteredEntity : public QObject
+class RegisteredEntity: public QObject
 {
 
-
-    Q_OBJECT
+Q_OBJECT
 
 protected:
     /**
@@ -49,6 +48,8 @@ protected:
 public:
     explicit RegisteredEntity(QObject *parent = nullptr);
 
+    virtual ~RegisteredEntity();
+
     /*
      * Mutators and accessors
      *
@@ -85,6 +86,19 @@ public:
 signals:
 
 public slots:
+
+    /**
+     * @brief instanceDestroyed
+     * supports notification of an Asset instance being destroyed.
+     * This may result in the update of the instances collection,
+     * if not handled by the standard Qt object hierarchy.
+     * Note: this slot should still be called even if the standard Qt
+     * object hierarchy is being used as it is specific to Asset objects,
+     * rather than all QObject children. Remember: QObjects emit the QObject::destroyed
+     * signal when they are being deleted.
+     * @param instance
+     */
+    void instanceDestroyed( std::shared_ptr<RegisteredEntity>  instance);
 };
 
 }

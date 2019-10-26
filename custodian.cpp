@@ -1,9 +1,5 @@
 #include "custodian.h"
 using namespace core;
-Custodian::Custodian()
-{
-
-}
 
 /**
  * @brief Custodian
@@ -17,7 +13,8 @@ Custodian::Custodian()
  * parent of custodian
  */
 Custodian::Custodian( QString id, QObject *parent) {
-
+    this->id = id;
+    this->setParent(parent);
 }
 
 /*
@@ -85,6 +82,7 @@ QString Custodian::getName() {
  */
 bool Custodian::setDepartment(TypedUserProperty<QString> department) {
     this->department = department;
+    return true;
 }
 /**
  * @brief getDepartment
@@ -108,6 +106,7 @@ TypedUserProperty<QString> Custodian::getDepartment () {
 bool Custodian::setDateTime(QDateTime date) {
 
     this->lastEditTime = date;
+    return true;
 }
 
 QDateTime Custodian::getDateTime() {
@@ -125,4 +124,6 @@ QDateTime Custodian::getDateTime() {
    */
 bool Custodian::setLastEditedBy(QString username) {
     this->lastEditedBy = username;
+    return true;
+
 }

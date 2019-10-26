@@ -4,16 +4,14 @@
 
 
 #include <QObject>
+#include <QVariant>
+
 
 namespace core {
 
 class UserProperty : public QObject
 {
-    /**
-     * @brief definition
-     * a reference to the UserPropertyDefintion that defines the 'type' of this UserProperty.
-     */
-    std::shared_ptr<UserPropertyDefinition> definition;
+
     /**
      * @brief name
      * the name of the property; must match its UserPropertyDefinition
@@ -23,6 +21,8 @@ class UserProperty : public QObject
     Q_OBJECT
 public:
     explicit UserProperty(QObject *parent = nullptr);
+    //explicit UserProperty(std::shared_ptr<UserPropertyDefinition>,QObject *parent = nullptr);
+    UserProperty(UserProperty &);
     /**
      * @brief UserProperty
      * since the class is derived from QObject,
@@ -31,7 +31,8 @@ public:
      * @param definition
      * @param parent
      */
-    UserProperty(std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
+    /* since this is a virtual class there is no need to instantiate this constructor */
+    // UserProperty(std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
 
     /**
      * @brief value

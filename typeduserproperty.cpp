@@ -6,6 +6,13 @@ TypedUserProperty<T>::TypedUserProperty(std::shared_ptr<UserPropertyDefinition> 
     this->definition = definition;
 }
 
+template <class T>
+TypedUserProperty<T>::TypedUserProperty(QString id,std::shared_ptr<UserPropertyDefinition> definition,QObject *parent){
+    this->setParent(parent);
+    this->id = id;
+    this->definition = definition;
+}
+
 
 
 /**
@@ -56,6 +63,7 @@ template <class T>
 QString TypedUserProperty<T>::getName () {
     return name;
 }
+
 
 template <class T>
 void TypedUserProperty<T>::setName (QString name) {

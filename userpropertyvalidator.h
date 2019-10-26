@@ -1,6 +1,7 @@
 #ifndef USERPROPERTYVALIDATOR_H
 #define USERPROPERTYVALIDATOR_H
 #include "userproperty.h"
+
 namespace core{
 /**
  * @brief The UserPropertyValidator class

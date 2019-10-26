@@ -25,16 +25,20 @@ class TypedUserProperty : public UserProperty
      * @brief value
      * the underlying value of the (Typed)UserProperty. 'T' is the template parameter.
      */
-
+    T _value;
     /**
      * @brief name
      * the name of the property; must match its UserPropertyDefinition
      */
     QString name;
-    T _value;
+
 public:
     explicit TypedUserProperty( std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
+    explicit TypedUserProperty(QString id, std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
+    TypedUserProperty() = default;
     TypedUserProperty(std::shared_ptr<UserPropertyDefinition> definition);
+    TypedUserProperty(TypedUserProperty &);
+    TypedUserProperty operator=(const TypedUserProperty &);
     /**
      * @brief getValue
      * value of property
@@ -81,7 +85,12 @@ public:
       * @param name
       */
      void setName(QString name);
-
+     /**
+      * @brief getName
+      * fetches name of typedUserValidator
+      * @return
+      * name of validator
+      */
      QString getName();
 
 

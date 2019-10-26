@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QVariant>
 #include "abstractentityfactory.h"
 namespace core {
 

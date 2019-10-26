@@ -9,7 +9,7 @@
 namespace core {
 class AbstractEntityFactory
 {
-    Q_OBJECT
+
 public:
     AbstractEntityFactory();
     virtual ~AbstractEntityFactory();
@@ -59,7 +59,7 @@ protected:
         @param paramaters optional map of parameters for Asset
         @param parent optional pointer to parent of Asset
       */
-    virtual std::shared_ptr<Asset> createAsset( AssetType type, QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    virtual std::shared_ptr<Asset> createAsset( std::shared_ptr<AssetType> assetType, QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
     /**
       @brief
       Instantiates and returns a (pointer to a)

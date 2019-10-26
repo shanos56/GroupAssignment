@@ -25,7 +25,7 @@ public:
         @param parent pointer to parent of custodian
 
     **/
-    std::shared_ptr<Custodian> createCustodian( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    std::shared_ptr<Custodian> createCustodian( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) override;
     /**
 
       @brief
@@ -38,7 +38,7 @@ public:
         @param paramaters optional map of parameters for AssetType
         @param parent optional pointer to parent of AssetType
       */
-    std::shared_ptr<AssetType> createAssetType( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    std::shared_ptr<AssetType> createAssetType( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) override;
 
     /**
 
@@ -54,7 +54,7 @@ public:
         @param paramaters optional map of parameters for Asset
         @param parent optional pointer to parent of Asset
       */
-    std::shared_ptr<Asset> createAsset( AssetType type, QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    std::shared_ptr<Asset> createAsset( std::shared_ptr<AssetType> assetType, QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) override;
     /**
       @brief
       Instantiates and returns a (pointer to a)
@@ -68,7 +68,7 @@ public:
         @param paramaters [optional] map of parameters for UserPropertyDefinition
         @param parent [optional] pointer to parent of UserPropertyDefinition
     */
-    std::shared_ptr<UserPropertyDefinition> createPropertyDefinition( QString id, QMap<QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    std::shared_ptr<UserPropertyDefinition> createPropertyDefinition( QString id, QMap<QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) override;
 
     /**
       @brief
@@ -83,8 +83,7 @@ public:
         @param paramaters [optional] map of parameters for UserProperty
         @param parent [optional] pointer to parent of UserProperty
     */
-
-    std::shared_ptr<UserProperty> createProperty( UserPropertyDefinition definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr );
+    std::shared_ptr<UserProperty> createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr );
 
 };
 }

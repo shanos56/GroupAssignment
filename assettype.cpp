@@ -19,6 +19,9 @@ AssetType::AssetType()
  */
 AssetType::AssetType( QString id, QObject *parent) {
 
+    this->id = id;
+    this->setParent(parent);
+
 }
 
 /**
@@ -32,12 +35,13 @@ AssetType::AssetType( QString id, QObject *parent) {
  * true - successfully added property definition
  * false - property definition name already exists
  */
-bool AssetType::addPropertyDefinition (QString name,UserPropertyDefinition propertyDefinition) {
+bool AssetType::addPropertyDefinition (QString name,std::shared_ptr<UserPropertyDefinition> propertyDefinition) {
     if ( this->propertyDefinitions.contains(name) )
         return false;
     else {
 
         this->propertyDefinitions.insert(name,propertyDefinition);
+        return true;
     }
 }
 
@@ -52,10 +56,11 @@ bool AssetType::addPropertyDefinition (QString name,UserPropertyDefinition prope
  * true - successfully updated property definition
  * false - property definition name already exists
  */
-bool AssetType::updatePropertyDefintion (QString name,UserPropertyDefinition propertyDefinition) {
+bool AssetType::updatePropertyDefintion (QString name,std::shared_ptr<UserPropertyDefinition> propertyDefinition) {
     if (this->propertyDefinitions.contains(name)) {
         this->propertyDefinitions.remove(name);
         this->propertyDefinitions.insert(name,propertyDefinition);
+        return true;
     } else {
         return false;
     }
@@ -72,6 +77,7 @@ bool AssetType::updatePropertyDefintion (QString name,UserPropertyDefinition pro
 bool AssetType::removePropertyDefinition (QString name) {
     if (this->propertyDefinitions.contains(name)) {
         this->propertyDefinitions.remove(name);
+        return true;
     } else {
         return false;
     }
@@ -82,7 +88,7 @@ bool AssetType::removePropertyDefinition (QString name) {
  * @return
  * vector(array) of property definitions
  */
-QVector<UserPropertyDefinition> AssetType::getPropertyDefinition() {
+QVector<std::shared_ptr<UserPropertyDefinition>> AssetType::getPropertyDefinition() {
     return this->propertyDefinitions.values().toVector();
 }
 
@@ -95,7 +101,7 @@ QVector<UserPropertyDefinition> AssetType::getPropertyDefinition() {
  * property defintion
  * nullptr
  */
-UserPropertyDefinition AssetType::getPropertyDefintion(QString name) {
+std::shared_ptr<UserPropertyDefinition> AssetType::getPropertyDefintion(QString name) {
     if (this->propertyDefinitions.contains(name))
         return this->propertyDefinitions.find(name).value();
     else {
@@ -108,11 +114,9 @@ UserPropertyDefinition AssetType::getPropertyDefintion(QString name) {
  * Creates and returns new Asset object that is linked to this AssetType as one of its instances.
  * @return
  */
-Asset AssetType::newInstance() {
+std::shared_ptr<Asset> AssetType::newInstance() {
 
-    Asset a ("aa",this);
-
-
+ std::shared_ptr<Asset>a{new Asset(QString("sdnf"),std::shared_ptr<RegisteredEntity>(this))};
 
 }
 /**
@@ -121,6 +125,20 @@ Asset AssetType::newInstance() {
  * @return
  * vector, array of assets
  */
-QVector<Asset> AssetType::instances () {
+QVector<std::shared_ptr<Asset>> AssetType::instances () {
+    return this->_instances;
+}
+
+
+void AssetType::instanceDestroyed(std::shared_ptr<Asset> instance) {
+    auto id = instance->getId();
+
+    for (auto a = this->_instances.begin(); a != this->_instances.end();a++ ) {
+
+        if (a->get()->getId() == id) {
+            this->_instances.erase(a);
+            break;
+        }
+    }
 
 }

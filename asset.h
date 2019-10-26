@@ -6,6 +6,7 @@
 #include "custodian.h"
 #include "typeduserproperty.h"
 #include "userproperty.h"
+#include <QVariant>
 
 namespace core {
 class Asset : public RegisteredEntity
@@ -80,8 +81,8 @@ class Asset : public RegisteredEntity
      */
     std::map<QString,std::shared_ptr<UserProperty>> userProperties;
 
+
 public:
-    explicit Asset(QObject * parent);
     /**
      * @brief Asset
      * since the class is derived from QObject, it should have the common QObject constructor
@@ -96,34 +97,146 @@ public:
 
     Asset( QString id, std::shared_ptr<RegisteredEntity>);
 
-
-    void purchaseAsset (QDateTime time);
+    /**
+     * @brief purchaseAsset
+     * sets purchase asset date
+     * @param time
+     * time the asset was purchased
+     */
+    bool purchaseAsset (QDateTime time);
+    /**
+     * @brief getPurchaseDate
+     * fetches purchase date from parameters
+     * @return
+     * purchase date
+     */
     QDateTime getPurchaseDate();
-
-    void setPurchasePrice(TypedUserProperty<double> price);
+    /**
+     * @brief setPurchasePrice
+     * purchase price of asset
+     * @param price
+     * price of asset
+     */
+    bool setPurchasePrice(TypedUserProperty<double> price);
+    /**
+     * @brief getPrice
+     * fetches the price of asset
+     * @return
+     * price of asset
+     */
     TypedUserProperty<double> getPrice();
-
-    void setModel(QString model);
+    /**
+     * @brief setModel
+     * sets model brand to asset
+     * @param model
+     * model of asset
+     */
+    bool setModel(QString model);
+    /**
+     * @brief getModel
+     * fetches model of asset
+     * @return
+     * model of asset
+     */
     QString getModel();
 
-    void setBrand (QString  name);
+    /**
+     * @brief setBrand
+     * sets brand name of asset
+     * @param name
+     * name of brand
+     */
+    bool setBrand (QString  name);
+    /**
+     * @brief getBrand
+     * fetches brand of asset
+     * @return
+     * brand name
+     */
     QString getBrand();
+    /**
+     * @brief sellAsset
+     * if asset is sold sell the asset
+     * @param time
+     * date of sale of asset
+     */
+    bool sellAsset(QDateTime time);
 
-    void sellAsset(QDateTime time);
+    /**
+     * @brief getDisposalDate
+     * fetches disposal date
+     * @return
+     * date time when disposal took place
+     */
     QDateTime getDisposalDate();
 
-
-    void setSerialNo(QString serial);
+    /**
+     * @brief setSerialNo
+     * sets serial number of asset
+     * @param serial
+     * serial number of asset
+     */
+    bool setSerialNo(QString serial);
+    /**
+     * @brief getSerialNo
+     * fetches serial number of asset
+     * @return
+     * string containing serial number
+     */
     QString getSerialNo();
-
+    /**
+     * @brief getAssetType
+     * fetches the asset type this asset belongs too
+     * @return
+     * asset type pointer
+     */
     std::shared_ptr<RegisteredEntity> getAssetType();
+    /**
+     * @brief setAssetType
+     * sets asset type of
+     * @param type
+     * asset type
+     * @return
+     * successfully set asset type
+     */
     bool setAssetType(std::shared_ptr<RegisteredEntity> type);
 
-    void setCustodian(std::shared_ptr<Custodian> custodian);
+
+    bool setCustodian(std::shared_ptr<Custodian> custodian);
+
     std::shared_ptr<Custodian> getCustodian();
 
-    void addUserProperty(QString name,std::shared_ptr<UserProperty> property);
+    bool addUserProperty(QString name,std::shared_ptr<UserProperty> property);
+
     std::shared_ptr<UserProperty> getUserProperty(QString name);
+
+    /**
+       * @brief setDateTime
+       * sets the latest date time
+       * @param date
+       * date to set otherwise use current date
+       * @return
+       * true - successfully set date time
+       * false - invalid datetime
+       */
+      bool setDateTime(QDateTime date = QDateTime::currentDateTime());
+    /**
+       * @brief setLastEditedBy
+       * set the last time user was edited
+       * @param username
+       * name of last user
+       * @return
+       * true - successfully set user
+       * false - invalid user
+       */
+      bool setLastEditedBy(QString username);
+    /**
+     * @brief getId
+     * fetches entities id
+     * @return
+     *  entities id
+     */
+   QString getId ();
 
 
 

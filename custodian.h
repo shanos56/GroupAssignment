@@ -2,6 +2,7 @@
 #define CUSTODIAN_H
 #include "registeredentity.h"
 #include "typeduserproperty.h"
+#include <QVariant>
 
 namespace core {
 class Custodian : public RegisteredEntity
@@ -50,7 +51,7 @@ class Custodian : public RegisteredEntity
     TypedUserProperty <QString> phoneNumber;
 
 public:
-    Custodian();
+    Custodian(QString id);
 
     /**
      * @brief Custodian
@@ -110,6 +111,8 @@ public:
      * false - invalid department
      */
     bool setDepartment(TypedUserProperty<QString>);
+
+
 
 
     /**

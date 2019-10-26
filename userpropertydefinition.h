@@ -5,6 +5,7 @@
 #include <QString>
 #include <QVariant>
 #include "userpropertyvalidator.h"
+
 namespace core {
 class UserPropertyDefinition : public QObject
 {
@@ -52,11 +53,16 @@ class UserPropertyDefinition : public QObject
      */
     QMap<QString,std::shared_ptr<UserPropertyValidator>> validators;
 
+    QString id;
+
+
+
 Q_OBJECT
 public:
-    explicit UserPropertyDefinition(QObject *parent = nullptr);
+    explicit UserPropertyDefinition(QString id,QObject *parent = nullptr);
 
     UserPropertyDefinition(UserPropertyDefinition &);
+
 
     /**
      * @brief getPrecision
@@ -94,10 +100,45 @@ public:
     * returns type of user definition property
     */
    types getType ();
-
-   bool setValidator (QString name, std::shared_ptr<UserPropertyValidator> validator);
-
+   /**
+    * @brief setValidator
+    * @param name
+    * @param validator
+    * @return
+    */
+   bool addValidator (QString name, std::shared_ptr<UserPropertyValidator> validator);
+   /**
+    * @brief removeValidator
+    * removes validator from list
+    * @param name
+    * name of validator
+    * @return
+    * true- successfully removed validator
+    * false - unsuccessfully removed validator
+    */
    bool removeValidator(QString name);
+   /**
+    * @brief getId
+    * fetches id
+    * @return
+    * gets id of object
+    */
+   QString getId();
+   /**
+    * @brief setValue
+    * @param value
+    * @return
+    * true - successfully set value
+    * false - failed to set value
+    */
+   bool setValue (QVariant value);
+   /**
+    * @brief getValue
+    *   retrieves value
+    * @return
+    * value to be returned
+    */
+   QVariant getValue();
 
 signals:
 
