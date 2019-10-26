@@ -30,6 +30,7 @@ return _username;
  */
 bool AssetRegister::setUsername(QString username) {
     this->_username = username;
+    return true;
 }
 /**
  * @brief generateId

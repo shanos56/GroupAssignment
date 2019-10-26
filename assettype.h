@@ -115,7 +115,7 @@ public:
      * Creates and returns new Asset object that is linked to this AssetType as one of its instances.
      * @return
      */
-    std::shared_ptr<Asset> newInstance();
+    std::shared_ptr<Asset> newInstance(QString id);
     /**
      * @brief instances
      * gets all asset instances connected to this asset type

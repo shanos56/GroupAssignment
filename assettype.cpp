@@ -114,10 +114,10 @@ std::shared_ptr<UserPropertyDefinition> AssetType::getPropertyDefintion(QString 
  * Creates and returns new Asset object that is linked to this AssetType as one of its instances.
  * @return
  */
-std::shared_ptr<Asset> AssetType::newInstance() {
+std::shared_ptr<Asset> AssetType::newInstance(QString id) {
 
- std::shared_ptr<Asset>a{new Asset(QString("sdnf"),std::shared_ptr<RegisteredEntity>(this))};
-
+   std::shared_ptr<Asset>a{new Asset(id,std::shared_ptr<AssetType>(this))};
+   return a;
 }
 /**
  * @brief instances

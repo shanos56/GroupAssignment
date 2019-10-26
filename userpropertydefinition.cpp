@@ -23,6 +23,7 @@ this->id = id;
 UserPropertyDefinition::UserPropertyDefinition( QString name, types type, QObject *parent) {
     this->name = name;
     dataType = type;
+    this->setParent(parent);
 
 }
 
@@ -48,11 +49,11 @@ std::shared_ptr<UserProperty> UserPropertyDefinition::newProperty(QObject *paren
     std::shared_ptr<UserPropertyDefinition>th (this);
 
     if (dataType == types::Qstring) {
-        return std::shared_ptr<UserProperty>{new TypedUserProperty<QString>(th)};
+        return std::shared_ptr<UserProperty>{new TypedUserProperty<QString>(th,parent)};
     } else if (dataType == types::Int)
-        return std::shared_ptr<UserProperty>{new TypedUserProperty<int>(th)};
+        return std::shared_ptr<UserProperty>{new TypedUserProperty<int>(th,parent)};
     else if (dataType == types::Double)
-        return std::shared_ptr<UserProperty>{new TypedUserProperty<double>(th)};
+        return std::shared_ptr<UserProperty>{new TypedUserProperty<double>(th,parent)};
     else {
         return nullptr;
     }
