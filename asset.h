@@ -2,7 +2,6 @@
 #define ASSET_H
 
 #include "registeredentity.h"
-
 #include "custodian.h"
 #include "typeduserproperty.h"
 #include "userproperty.h"

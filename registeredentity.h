@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDateTime>
+
 namespace core {
 class RegisteredEntity: public QObject
 {
@@ -44,11 +45,16 @@ protected:
        * @param parent
        * object parent
        */
-    RegisteredEntity( QString id, QObject *parent = nullptr);
+    explicit RegisteredEntity( QString id, QObject *parent = nullptr){
+        this->id = id;
+        this->setParent(parent);
+    }
 public:
-    explicit RegisteredEntity(QObject *parent = nullptr);
+    explicit RegisteredEntity(QObject *parent = nullptr){
+        this->setParent(parent);
+    }
 
-    virtual ~RegisteredEntity();
+    virtual ~RegisteredEntity(){}
 
     /*
      * Mutators and accessors
@@ -98,7 +104,7 @@ public slots:
      * signal when they are being deleted.
      * @param instance
      */
-    void instanceDestroyed( std::shared_ptr<RegisteredEntity>  instance);
+    virtual void instanceDestroyed( std::shared_ptr<RegisteredEntity>  instance){}
 };
 
 }

@@ -7,7 +7,7 @@ AbstractAssetRegister::AbstractAssetRegister(QObject *parent) : QObject(parent)
 
 
 void AbstractAssetRegister::resetSingleton() {
-    _instance.reset();
+
 }
 
 

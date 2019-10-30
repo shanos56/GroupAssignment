@@ -1,9 +1,6 @@
 #include "assettype.h"
 using namespace core;
-AssetType::AssetType()
-{
 
-}
 
 
 /**
@@ -17,13 +14,14 @@ AssetType::AssetType()
  * @param parent
  * parent object
  */
-AssetType::AssetType( QString id, QObject *parent) {
 
+ /*
+AssetType::AssetType( QString id, QObject *parent) {
     this->id = id;
     this->setParent(parent);
 
 }
-
+*/
 /**
  * @brief addPropertyDefinition
  * sets a new property definition
@@ -130,7 +128,8 @@ QVector<std::shared_ptr<Asset>> AssetType::instances () {
 }
 
 
-void AssetType::instanceDestroyed(std::shared_ptr<Asset> instance) {
+void AssetType::instanceDestroyed(std::shared_ptr<RegisteredEntity> instance) {
+
     auto id = instance->getId();
 
     for (auto a = this->_instances.begin(); a != this->_instances.end();a++ ) {
@@ -141,4 +140,41 @@ void AssetType::instanceDestroyed(std::shared_ptr<Asset> instance) {
         }
     }
 
+}
+
+
+/**
+   * @brief setDateTime
+   * sets the latest date time
+   * @param date
+   * date to set otherwise use current date
+   * @return
+   * true - successfully set date time
+   * false - invalid datetime
+   */
+bool AssetType::setDateTime(QDateTime date){
+    this->lastEditTime = date;
+    return true;
+}
+/**
+   * @brief setLastEditedBy
+   * set the last time user was edited
+   * @param username
+   * name of last user
+   * @return
+   * true - successfully set user
+   * false - invalid user
+   */
+bool AssetType::setLastEditedBy(QString username) {
+    this->lastEditedBy = username;
+    return true;
+}
+/**
+ * @brief getId
+ * fetches entities id
+ * @return
+ *  entities id
+ */
+QString AssetType::getId () {
+    return id;
 }

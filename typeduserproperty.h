@@ -2,6 +2,7 @@
 #define TYPEDUSERPROPERTY_H
 #include "userpropertydefinition.h"
 #include "userproperty.h"
+
 namespace core {
 
 /**
@@ -32,13 +33,15 @@ class TypedUserProperty : public UserProperty
      */
     QString name;
 
+    QString id;
+
 public:
     explicit TypedUserProperty( std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
     explicit TypedUserProperty(QString id, std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
-    TypedUserProperty() = default;
     TypedUserProperty(std::shared_ptr<UserPropertyDefinition> definition);
+    TypedUserProperty() = default;
     TypedUserProperty(TypedUserProperty &);
-    TypedUserProperty operator=(const TypedUserProperty &);
+    TypedUserProperty operator=(TypedUserProperty &);
     /**
      * @brief getValue
      * value of property
@@ -93,9 +96,16 @@ public:
       */
      QString getName();
 
+     QString getId();
+
 
 
 };
 }
+
+
+#include "typeduserproperty.cpp"
+
+
 
 #endif // TYPEDUSERPROPERTY_H

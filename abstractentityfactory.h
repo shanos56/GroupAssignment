@@ -11,10 +11,10 @@ class AbstractEntityFactory
 {
 
 public:
-    AbstractEntityFactory();
-    virtual ~AbstractEntityFactory();
+     virtual ~AbstractEntityFactory();
+     AbstractEntityFactory();
 
-protected:
+
     /**
       @brief
       Instantiates and returns a (pointer to a)
@@ -30,7 +30,7 @@ protected:
         @param parent pointer to parent of custodian
 
     **/
-    virtual std::shared_ptr<Custodian> createCustodian( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    virtual std::shared_ptr<Custodian> createCustodian( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr )=0;
     /**
 
       @brief
@@ -43,7 +43,7 @@ protected:
         @param paramaters optional map of parameters for AssetType
         @param parent optional pointer to parent of AssetType
       */
-    virtual std::shared_ptr<AssetType> createAssetType( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    virtual std::shared_ptr<AssetType> createAssetType( QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) = 0;
 
     /**
 
@@ -59,7 +59,7 @@ protected:
         @param paramaters optional map of parameters for Asset
         @param parent optional pointer to parent of Asset
       */
-    virtual std::shared_ptr<Asset> createAsset( std::shared_ptr<AssetType> assetType, QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    virtual std::shared_ptr<Asset> createAsset( std::shared_ptr<AssetType> assetType, QString id, QMap <QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) = 0;
     /**
       @brief
       Instantiates and returns a (pointer to a)
@@ -73,7 +73,7 @@ protected:
         @param paramaters [optional] map of parameters for UserPropertyDefinition
         @param parent [optional] pointer to parent of UserPropertyDefinition
     */
-    virtual std::shared_ptr<UserPropertyDefinition> createPropertyDefinition( QString id, QMap<QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr );
+    virtual std::shared_ptr<UserPropertyDefinition> createPropertyDefinition( QString id, QMap<QString, QVariant> parameters = QMap <QString,QVariant>{}, QObject *parent = nullptr ) = 0;
 
     /**
       @brief
@@ -89,7 +89,7 @@ protected:
         @param parent [optional] pointer to parent of UserProperty
     */
 
-    virtual std::shared_ptr<UserProperty> createProperty( UserPropertyDefinition definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr );
+    virtual std::shared_ptr<UserProperty> createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr ) = 0;
 
     signals:
 

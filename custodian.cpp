@@ -127,3 +127,7 @@ bool Custodian::setLastEditedBy(QString username) {
     return true;
 
 }
+
+QString Custodian::getId() {
+    return this->id;
+}

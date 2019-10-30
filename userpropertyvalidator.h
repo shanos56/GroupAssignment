@@ -14,8 +14,8 @@ namespace core{
 class UserPropertyValidator
 {
 public:
-    UserPropertyValidator();
-    virtual ~UserPropertyValidator();
+    UserPropertyValidator(){}
+    virtual ~UserPropertyValidator(){}
     /**
      * @brief operator ()
      * the overloaded function call '()' operator making UserPropertyValidator a functor. The overloaded operator takes a UserProperty (reference) and

@@ -83,7 +83,7 @@ public:
         @param paramaters [optional] map of parameters for UserProperty
         @param parent [optional] pointer to parent of UserProperty
     */
-    std::shared_ptr<UserProperty> createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr );
+    std::shared_ptr<UserProperty> createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters = QMap<QString, QVariant>{}, QObject *parent = nullptr ) override;
 
 };
 }

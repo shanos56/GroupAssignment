@@ -14,6 +14,7 @@ namespace core {
 class AssetType : public RegisteredEntity
 {
 
+Q_OBJECT
 
     /**
      * @brief instances
@@ -44,8 +45,7 @@ class AssetType : public RegisteredEntity
 
 
 public:
-    AssetType();
-
+    AssetType() =default;
     /**
      * @brief AssetType
      * since the class is derived from QObject,
@@ -57,7 +57,21 @@ public:
      * @param parent
      * parent object
      */
-    AssetType( QString id, QObject *parent);
+    explicit AssetType( QString id, QObject *parent){
+        this->id = id;
+        this->setParent(parent);
+    }
+
+    ~AssetType() override {
+        for(auto i : _instances) {
+            i.reset();
+        }
+        _instances.clear();
+        for (auto i: propertyDefinitions) {
+            i.reset();
+        }
+        propertyDefinitions.clear();
+    }
 
     /**
      * @brief addPropertyDefinition
@@ -133,7 +147,7 @@ public:
        * true - successfully set date time
        * false - invalid datetime
        */
-      bool setDateTime(QDateTime date = QDateTime::currentDateTime());
+    bool setDateTime(QDateTime date = QDateTime::currentDateTime()) override;
     /**
        * @brief setLastEditedBy
        * set the last time user was edited
@@ -143,14 +157,14 @@ public:
        * true - successfully set user
        * false - invalid user
        */
-      bool setLastEditedBy(QString username);
+    bool setLastEditedBy(QString username) override;
     /**
      * @brief getId
      * fetches entities id
      * @return
      *  entities id
      */
-    QString getId ();
+    QString getId () override;
 
 
 public slots:
@@ -165,7 +179,7 @@ public slots:
      * signal when they are being deleted.
      * @param instance
      */
-    void instanceDestroyed( std::shared_ptr<Asset>  instance);
+    void instanceDestroyed( std::shared_ptr<RegisteredEntity>  instance) override;
 
 
 };

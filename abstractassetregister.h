@@ -121,7 +121,7 @@ The type is not specified as this may be defined as a single function using inhe
      * true - stored entity
      * false - entity id is not unique
      */
-    virtual bool storeEntity(RegisteredEntity *) = 0;
+    virtual bool storeEntity(std::shared_ptr<RegisteredEntity>) = 0;
     /**
      * @brief retrieveEntity
      * retrieves an entity (Asset, AssetType, Custodian) from the Asset Register using the entity’s identifier.

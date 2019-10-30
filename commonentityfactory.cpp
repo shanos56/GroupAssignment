@@ -1,7 +1,6 @@
 #include "commonentityfactory.h"
 using namespace core;
-CommonEntityFactory::CommonEntityFactory()
-{
+CommonEntityFactory::CommonEntityFactory(){
 
 }
 
@@ -54,6 +53,7 @@ std::shared_ptr<Custodian> CommonEntityFactory::createCustodian( QString id, QMa
 std::shared_ptr<AssetType> CommonEntityFactory::createAssetType( QString id, QMap <QString, QVariant> parameters, QObject *parent){
 
     std::shared_ptr<AssetType> assetType {new AssetType(id,parent)};
+
     for (auto i = parameters.begin(); i != parameters.end(); i++) {
          if (i.key().compare("DateTime") == 0) {
             assetType.get()->setDateTime(i.value().toDateTime());
