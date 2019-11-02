@@ -33,6 +33,7 @@ SOURCES += \
         commonentityfactory.cpp \
         concretevalidators.cpp \
         custodian.cpp \
+        formstatushandler.cpp \
         loadfile.cpp \
         login.cpp \
         main.cpp \
@@ -52,6 +53,8 @@ HEADERS += \
         commonentityfactory.h \
         concretevalidators.h \
         custodian.h \
+        formstatus.h \
+        formstatushandler.h \
         loadfile.h \
         login.h \
         mainwindow.h \

@@ -14,17 +14,18 @@ class AbstractAssetRegister : public QObject
 
     Q_OBJECT
 
-protected:
-
-    QString _username;
+private:
     /**
      * @brief _instance
      * instance of AssetRegister
      */
-    static std::shared_ptr<AbstractAssetRegister> _instance;
 
-    template<class T>
-    static T type;
+
+        static std::weak_ptr<AbstractAssetRegister> _instance;
+
+protected:
+
+    QString _username;
 
 
     /**
@@ -49,7 +50,9 @@ protected:
       *
       * @return
       */
-     static std::shared_ptr<AbstractAssetRegister> getRegister();
+    static std::shared_ptr<AbstractAssetRegister> getRegister() {
+        return _instance.lock();
+    }
 public:
 
      /**
@@ -61,14 +64,17 @@ Everywhere else in the application may simply call: AbstractAssetRegister::insta
      * returns instance
      */
      template<class T>
-     static std::shared_ptr<T> instance();
+     static std::shared_ptr<AbstractAssetRegister> instance(){
 
-     template<class T>
-     static void setType(T type);
+         auto result = AbstractAssetRegister::_instance.lock();
+         if (!result ) {
 
+             result = std::shared_ptr<AbstractAssetRegister>(new T());
+             AbstractAssetRegister::_instance = result;
+         }
+         return AbstractAssetRegister::_instance.lock();
+     }
 
-     template<class T>
-     static T getType();
 
     /**
      * @brief username
@@ -182,8 +188,10 @@ The type is not specified as this may be defined as a single function using inhe
     virtual bool restore(QMap<QString, QVariant> options) = 0;
 
 
-
-    static void resetSingleton();
+    template<class T>
+     static void resetSingleton() {
+         _instance.reset(new T());
+     }
 
 
 
@@ -193,5 +201,7 @@ signals:
 public slots:
 };
 }
+
+
 
 #endif // ABSTRACASSETREGISTER_H

@@ -19,7 +19,7 @@ public:
     * @return QString
     * username
     */
-   QString username();
+   QString username() override;
    /**
     * @brief setUsername
     * mutator to set username
@@ -27,7 +27,7 @@ public:
     * true upon successfully changing username
     * false - failed to change username
     */
-   bool setUsername(QString username);
+   bool setUsername(QString username) override;
    /**
     * @brief generateId
     * assuming we are operating in a distributed environment it is
@@ -42,7 +42,7 @@ public:
     * @return
     * QString generated Identification number as a string
     */
-   QString generateId();
+   QString generateId() override;
    /**
     * @brief getFactory
     * returns (a reference to) the AbstractEntityFactory
@@ -50,7 +50,7 @@ public:
     * @return AbstractEntityFactory
     *  get factory
     */
-   std::shared_ptr<AbstractEntityFactory> getFactory();
+   std::shared_ptr<AbstractEntityFactory> getFactory() override;
    /**
     * @brief storeEntity
     * stores an entity (Asset, AssetType, Custodian) in the Asset Register: must return true if the entity was added successfully, false if the it was not (e.g., due to the ID not being unique).
@@ -59,7 +59,7 @@ The type is not specified as this may be defined as a single function using inhe
     * true - stored entity
     * false - entity id is not unique
     */
-   bool storeEntity(std::shared_ptr<RegisteredEntity> entity);
+   bool storeEntity(std::shared_ptr<RegisteredEntity> entity) override;
    /**
     * @brief retrieveEntity
     * retrieves an entity (Asset, AssetType, Custodian) from the Asset Register using the entity’s identifier.
@@ -72,7 +72,7 @@ The type is not specified as this may be defined as a single function using inhe
     * Entity - successfully found entity
     * nullptr - could not find entity in list
     */
-   std::shared_ptr<RegisteredEntity> retrieveEntity(QString id)  = 0;
+   std::shared_ptr<RegisteredEntity> retrieveEntity(QString id) override;
    /**
     * @brief deleteEntity
     *
@@ -80,7 +80,7 @@ The type is not specified as this may be defined as a single function using inhe
     * true - found entity and deleted
     * false - could not find identification
     */
-   bool deleteEntity(QString id) = 0;
+   bool deleteEntity(QString id) override;
    /**
     * @brief allEntities
     * remove the entity with the given identifier from the register:
@@ -92,7 +92,7 @@ The type is not specified as this may be defined as a single function using inhe
     * @return
     * vector array of entities
     */
-   QVector<std::shared_ptr<RegisteredEntity>> allEntities() = 0;
+   QVector<std::shared_ptr<RegisteredEntity>> allEntities() override;
    /**
     * @brief persist
     * stores the data maintained in the register to some
@@ -106,7 +106,7 @@ The type is not specified as this may be defined as a single function using inhe
     *
     * @return
     */
-   bool persist(QMap<QString, QVariant> options) = 0;
+   bool persist(QMap<QString, QVariant> options) override;
    /**
     * @brief restore
     * loads the data from persistent storage into the register.
@@ -117,7 +117,7 @@ The type is not specified as this may be defined as a single function using inhe
     * @param options
     * @return
     */
-   bool restore(QMap<QString, QVariant> options) = 0;
+   bool restore(QMap<QString, QVariant> options) override;
 
 
 

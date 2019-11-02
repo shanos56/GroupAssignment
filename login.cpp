@@ -2,9 +2,11 @@
 #include "ui_login.h"
 #include <QMessageBox>
 
-Login::Login(QWidget *parent) :
+
+Login::Login(std::shared_ptr<AbstractAssetRegister> reg, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Login)
+    ui(new Ui::Login),
+    _reg(reg)
 {
     ui->setupUi(this);
 }
@@ -14,27 +16,43 @@ Login::~Login()
     delete ui;
 }
 
-void Login::on_pushButton_clicked()
-{
-
-    QString _username;
-    QString _user = ui->lineEdit_username->text();
-
-    if (_user.compare(_username) == 0) {
-        if (ui->radioButton_online) {
-
-        }
-        this->close();
-    } else {
-        QMessageBox failureMessage (this);
-        QMessageBox::warning(this,"Invalid Username","Username wasn't found in program.",QMessageBox::Ok);
-    }
-
-
-}
 
 void Login::on_pushButton_Quit_clicked()
 {
-    QApplication::quit();
+   emit this->closeForm(UI::FormStatus::LOGIN);
+
+}
+
+
+void Login::on_pushButton_login_clicked()
+{
+    QString _user = ui->lineEdit_username->text();
+    qDebug() << "Login button Working";
+    this->_reg.get()->setUsername(_user);
+
+
+    qDebug() << "Login button Working";
+
+    if (ui->radioButton_online->isChecked()) {
+         qDebug() << "online button checked";
+        emit loginSuccess(UI::FormStatus::LOADFILE);
+        emit closeForm(UI::FormStatus::LOGIN);
+
+    } else if (ui->radioButton_offline->isChecked()){
+        qDebug() << "offline button checked";
+       emit loginSuccess(UI::FormStatus::MAIN);
+       emit closeForm(UI::FormStatus::LOGIN);
+    }else {
+        QMessageBox failureMessage (this);
+        QMessageBox::warning(this,"Invalid Username","Invalid Username.",QMessageBox::Ok);
+    }
+}
+
+void Login::on_Login_destroyed()
+{
+
+
+
+
 
 }

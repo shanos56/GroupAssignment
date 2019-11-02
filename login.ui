@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -60,6 +60,9 @@
         <property name="text">
          <string>Online</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -87,7 +90,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_Username">
+       <widget class="QPushButton" name="pushButton_login">
         <property name="text">
          <string>Login</string>
         </property>
@@ -109,7 +112,7 @@
   <tabstop>lineEdit_username</tabstop>
   <tabstop>radioButton_online</tabstop>
   <tabstop>radioButton_offline</tabstop>
-  <tabstop>pushButton_Username</tabstop>
+  <tabstop>pushButton_login</tabstop>
   <tabstop>pushButton_Quit</tabstop>
  </tabstops>
  <resources/>
