@@ -139,6 +139,8 @@ public:
     * value to be returned
     */
    QVariant getValue();
+   
+   bool validatorExists(QString name);
 
 signals:
 

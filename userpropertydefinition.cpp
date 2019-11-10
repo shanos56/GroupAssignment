@@ -49,11 +49,11 @@ std::shared_ptr<UserProperty> UserPropertyDefinition::newProperty(QObject *paren
     std::shared_ptr<UserPropertyDefinition>th (this);
 
     if (dataType == types::Qstring) {
-        return std::shared_ptr<UserProperty>{new TypedUserProperty<QString>(th,parent)};
+        return std::shared_ptr<UserProperty>{new TypedUserProperty<QString>(th)};
     } else if (dataType == types::Int)
-        return std::shared_ptr<UserProperty>{new TypedUserProperty<int>(th,parent)};
+        return std::shared_ptr<UserProperty>{new TypedUserProperty<int>(th)};
     else if (dataType == types::Double)
-        return std::shared_ptr<UserProperty>{new TypedUserProperty<double>(th,parent)};
+        return std::shared_ptr<UserProperty>{new TypedUserProperty<double>(th)};
     else {
         return nullptr;
     }
@@ -140,6 +140,7 @@ QString getId();
  */
 bool UserPropertyDefinition::setValue (QVariant value) {
     this->_default = value;
+    return true;
 }
 /**
  * @brief getValue
@@ -149,4 +150,14 @@ bool UserPropertyDefinition::setValue (QVariant value) {
  */
 QVariant UserPropertyDefinition::getValue() {
     return _default;
+}
+
+
+bool UserPropertyDefinition::validatorExists(QString name) {
+
+    if (this->validators.find(name) != this->validators.end()) {
+        return true;
+    } else {
+        return false;
+    }
 }

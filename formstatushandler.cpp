@@ -2,19 +2,23 @@
 using namespace UI;
 void FormStatusHandler::setStatus(FormStatus stat) {
     // check if current status is not equal to new status
-     qDebug()<<"Add "<< QString(stat);
-    if (this->getStatus() !=  stat) {
-        qDebug()<<"current status "<< QString(this->getStatus());
-        this->status.append(stat);
 
-        qDebug()<<"append dialog status "<< QString(this->getStatus());
+    if (this->getStatus() !=  stat) {
+        this->status.append(stat);
         this->addDialog(stat);
-        qDebug()<<"append dialog "<< QString(this->getStatus());
-        qDebug()<<"Add Window";
         showWindow();
-        qDebug()<<"show Window";
+
     }
 
+}
+
+void FormStatusHandler::setStatus(UI::FormStatus stat, QString id) {
+
+    if (this->getStatus() !=  stat) {
+        this->status.append(stat);
+        this->addDialog(stat);
+        showWindow();
+    }
 }
 
 

@@ -96,6 +96,8 @@ public:
 
     Asset( QString id, std::shared_ptr<RegisteredEntity>);
 
+    ~Asset()  override;
+
     /**
      * @brief purchaseAsset
      * sets purchase asset date
@@ -200,7 +202,6 @@ public:
      */
     bool setAssetType(std::shared_ptr<RegisteredEntity> type);
 
-
     bool setCustodian(std::shared_ptr<Custodian> custodian);
 
     std::shared_ptr<Custodian> getCustodian();
@@ -218,7 +219,7 @@ public:
        * true - successfully set date time
        * false - invalid datetime
        */
-      bool setDateTime(QDateTime date = QDateTime::currentDateTime());
+      bool setDateTime(QDateTime date = QDateTime::currentDateTime()) override;
     /**
        * @brief setLastEditedBy
        * set the last time user was edited
@@ -228,16 +229,24 @@ public:
        * true - successfully set user
        * false - invalid user
        */
-      bool setLastEditedBy(QString username);
+      bool setLastEditedBy(QString username) override;
     /**
      * @brief getId
      * fetches entities id
      * @return
      *  entities id
      */
-   QString getId ();
+   QString getId () override;
+
+   QString type() override;
+
+   QString getLastEditedBy();
+
+   QDateTime getLastTimeEdited();
 
 
+signals:
+  void instanceDestroyed(QString id) override;
 
 public slots:
     /**

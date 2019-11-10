@@ -29,7 +29,7 @@ std::shared_ptr<Custodian> CommonEntityFactory::createCustodian( QString id, QMa
     for (auto i = parameters.begin(); i != parameters.end(); i++) {
          if (i.key().compare("DateTime") == 0) {
             custodian.get()->setDateTime(i.value().toDateTime());
-        } else if (i.key().compare("lastEditedBy") == 0) {
+        } else if (i.key().compare("LastEditedBy") == 0) {
             custodian.get()->setLastEditedBy(i.value().toString());
         }
     }
@@ -136,15 +136,15 @@ other values deemed necessary to correctly construct the object.
 
 std::shared_ptr<UserProperty> CommonEntityFactory::createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters, QObject *parent){
     auto it = parameters.find("type");
-    std::shared_ptr<UserProperty> a(new TypedUserProperty<QString>(id,definition,parent));
+    std::shared_ptr<UserProperty> a(new TypedUserProperty<QString>(id,definition));
     QString type = "QString";
     if (it != parameters.end()) {
         if (it.value().toString().compare("Double") == 0) {
             type = "Double";
-            std::shared_ptr<UserProperty> a {new TypedUserProperty<double>(id,definition,parent)};
+            std::shared_ptr<UserProperty> a {new TypedUserProperty<double>(id,definition)};
         } else if (it.value().toString().compare("Int") == 0) {
             type = "Int";
-            std::shared_ptr<UserProperty> a {new TypedUserProperty<int>(id,definition,parent)};
+            std::shared_ptr<UserProperty> a {new TypedUserProperty<int>(id,definition)};
         }
     }
     for (auto it = parameters.begin(); it != parameters.end();it++) {

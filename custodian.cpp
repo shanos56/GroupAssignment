@@ -28,8 +28,9 @@ Custodian::Custodian( QString id, QObject *parent) {
  * true - successfully set phone number
  * false - invalid phone number
  */
-bool Custodian::setPhoneNumber (TypedUserProperty<QString> number) {
-    if (number.validate())  {
+bool Custodian::setPhoneNumber (std::shared_ptr<TypedUserProperty <QString>> number) {
+
+    if (number->validate())  {
         this->phoneNumber = number;
          return true;
     }
@@ -41,7 +42,7 @@ bool Custodian::setPhoneNumber (TypedUserProperty<QString> number) {
  * @return
  * userproperty string containing phone number
  */
-TypedUserProperty<QString> Custodian::getPhoneNumber() {
+std::shared_ptr<TypedUserProperty <QString>> Custodian::getPhoneNumber() {
     return this->phoneNumber;
 }
 
@@ -52,10 +53,10 @@ TypedUserProperty<QString> Custodian::getPhoneNumber() {
  * true - valid name set to custodian
  * false - invalid name
  */
-bool Custodian::setName(TypedUserProperty<QString> name) {
+bool Custodian::setName(std::shared_ptr<TypedUserProperty <QString>> name) {
 
-    if (name.validate()) {
-        this->name = name.getValue();
+    if (name->validate()) {
+        this->name = name->getValue();
         return true;
     }else {
         return false;
@@ -80,7 +81,7 @@ QString Custodian::getName() {
  * true - valid department set to custodian
  * false - invalid department
  */
-bool Custodian::setDepartment(TypedUserProperty<QString> department) {
+bool Custodian::setDepartment(std::shared_ptr<TypedUserProperty <QString>> department) {
     this->department = department;
     return true;
 }
@@ -90,7 +91,7 @@ bool Custodian::setDepartment(TypedUserProperty<QString> department) {
  * @return
  *
  */
-TypedUserProperty<QString> Custodian::getDepartment () {
+std::shared_ptr<TypedUserProperty <QString>> Custodian::getDepartment () {
     return department;
 }
 /**
@@ -130,4 +131,12 @@ bool Custodian::setLastEditedBy(QString username) {
 
 QString Custodian::getId() {
     return this->id;
+}
+
+QString Custodian::type() {
+    return "Custodian";
+}
+
+QString Custodian::getLastEditedBy () {
+    return this->lastEditedBy;
 }

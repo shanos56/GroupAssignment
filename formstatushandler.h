@@ -9,6 +9,10 @@
 #include "login.h"
 #include "mainwindow.h"
 #include "assetregister.h"
+#include "assettypeform.h"
+#include "custodianform.h"
+#include "assetform.h"
+#include "userpropertyform.h"
 namespace UI {
 class FormStatusHandler: public QObject
 {
@@ -27,35 +31,67 @@ class FormStatusHandler: public QObject
     bool mainWindowOpen = false;
 
 
-    void addDialog (FormStatus stat) {
+    void addDialog (FormStatus stat, QString id = "") {
 
         switch (stat) {
 
             case LOGIN: {
-            qDebug()<<"Login";
                 std::shared_ptr<QDialog>form {new Login(_reg,_window.get())};
-                qDebug()<<"created Login";
                 this->dialogs.append(form);
-                 qDebug()<<"appended Login";
                 QObject::connect(form.get(),SIGNAL(loginSuccess(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
                 QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
-                qDebug()<<"Added Login";
                 showWindow();
                 break;
             }
 
             case MAIN: {
-                this->_window = std::shared_ptr<QMainWindow>(new MainWindow());
-                qDebug() << "Main App created";
+                this->_window = std::shared_ptr<QMainWindow>(new MainWindow(this->_reg));
                 this->dialogs.append(nullptr);
+                QObject::connect(this->_window.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
+                QObject::connect(this->_window.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
+                QObject::connect(this->_window.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
                 mainWindowOpen = true;
+                showWindow();
                 break;
             }
 
-            case FormStatus::VIEWASSETTYPES: {
-
-
+            case FormStatus::EDITASSETTYPE: {
+                std::shared_ptr<QDialog>form {new AssetTypeForm(_reg,id,_window.get())};
+                this->dialogs.append(form);
+                this->setSignals(form);
+                showWindow();
+                break;
             }
+            
+        case FormStatus::EDITCUSTODIAN: {
+            std::shared_ptr<QDialog>form {new CustodianForm(_reg,id,_window.get())};
+            this->dialogs.append(form);
+             this->setSignals(form);
+            showWindow();
+            break;
+        }
+
+        case FormStatus::EDITASSET: {
+            std::shared_ptr<QDialog>form {new AssetForm(_reg,id,_window.get())};
+            this->dialogs.append(form);
+            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
+            QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
+            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
+            showWindow();
+            break;
+        }
+
+        case FormStatus::USERPROPERTY: {
+            std::shared_ptr<QDialog>form {new UserPropertyForm(_reg,id,_window.get())};
+            this->dialogs.append(form);
+            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
+            QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
+            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
+            showWindow();
+            break;
+        }
+        default:
+            break;
 
         }
     }
@@ -116,6 +152,12 @@ class FormStatusHandler: public QObject
         QApplication::exit();
     }
 
+    void setSignals(std::shared_ptr<QDialog> form) {
+        QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
+        QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
+        QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
+    }
+
 
 public:
     explicit FormStatusHandler(QApplication &app, QObject *parent = nullptr): _app{app} {
@@ -146,6 +188,7 @@ public:
 
 public slots:
     void setStatus(UI::FormStatus stat);
+    void setStatus(UI::FormStatus stat, QString id);
     void closeStatus(UI::FormStatus stat = NULLSTATUS);
 
 

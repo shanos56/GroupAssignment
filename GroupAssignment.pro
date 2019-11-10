@@ -28,11 +28,14 @@ SOURCES += \
         abstractassetregister.cpp \
         abstractentityfactory.cpp \
         asset.cpp \
+        assetform.cpp \
         assetregister.cpp \
         assettype.cpp \
+        assettypeform.cpp \
         commonentityfactory.cpp \
         concretevalidators.cpp \
         custodian.cpp \
+        custodianform.cpp \
         formstatushandler.cpp \
         loadfile.cpp \
         login.cpp \
@@ -42,17 +45,21 @@ SOURCES += \
         typeduserproperty.cpp \
         userproperty.cpp \
         userpropertydefinition.cpp \
+        userpropertyform.cpp \
         userpropertyvalidator.cpp
 
 HEADERS += \
         abstractassetregister.h \
         abstractentityfactory.h \
         asset.h \
+        assetform.h \
         assetregister.h \
         assettype.h \
+        assettypeform.h \
         commonentityfactory.h \
         concretevalidators.h \
         custodian.h \
+        custodianform.h \
         formstatus.h \
         formstatushandler.h \
         loadfile.h \
@@ -62,12 +69,17 @@ HEADERS += \
         typeduserproperty.h \
         userproperty.h \
         userpropertydefinition.h \
+        userpropertyform.h \
         userpropertyvalidator.h
 
 FORMS += \
+        assetform.ui \
+        assettypeform.ui \
+        custodianform.ui \
         loadfile.ui \
         login.ui \
-        mainwindow.ui
+        mainwindow.ui \
+        userpropertyform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

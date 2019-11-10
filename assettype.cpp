@@ -86,10 +86,14 @@ bool AssetType::removePropertyDefinition (QString name) {
  * @return
  * vector(array) of property definitions
  */
-QVector<std::shared_ptr<UserPropertyDefinition>> AssetType::getPropertyDefinition() {
+QVector<std::shared_ptr<UserPropertyDefinition>> AssetType::getPropertyDefinitions() {
     return this->propertyDefinitions.values().toVector();
 }
 
+
+QVector<QString> AssetType::getPropertyDefinitionNames() {
+    return this->propertyDefinitions.keys().toVector();
+}
 /**
  * @brief getPropertyDefintion
  * copy of defintion
@@ -128,7 +132,7 @@ QVector<std::shared_ptr<Asset>> AssetType::instances () {
 }
 
 
-void AssetType::instanceDestroyed(std::shared_ptr<RegisteredEntity> instance) {
+void AssetType::instanceDestroyed2(std::shared_ptr<RegisteredEntity> instance) {
 
     auto id = instance->getId();
 
@@ -177,4 +181,31 @@ bool AssetType::setLastEditedBy(QString username) {
  */
 QString AssetType::getId () {
     return id;
+}
+
+QString AssetType::type() {
+    return "AssetType";
+}
+
+
+QString AssetType::getLastEditedBy () {
+    return this->lastEditedBy;
+}
+QDateTime AssetType::getDateTime() {
+    return this->lastEditTime;
+}
+
+void AssetType::instanceDestroyed(QString id) {
+    if (!_instances.isEmpty()) {
+        int count = 0;
+        for (auto i =_instances.begin();i != _instances.end();i++) {
+
+            if (i->get()->getId().compare(id) == 0) {
+                _instances.remove(count);
+                break;
+            }
+            count++;
+        }
+
+    }
 }

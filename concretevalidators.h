@@ -3,6 +3,7 @@
 
 #include "userpropertyvalidator.h"
 #include <QChar>
+#include <QVector>
 
 namespace core {
 /**
@@ -42,6 +43,7 @@ class MinimumValueValidator : public UserPropertyValidator{
     bool value (double val);
 
 public:
+
     MinimumValueValidator(int val);
 
     MinimumValueValidator(double val);
@@ -158,9 +160,9 @@ class ValueListValidator : public UserPropertyValidator
 
     types dataType;
 
-    std::vector<QString> strings;
-    std::vector<int> ints;
-    std::vector<double> doubles;
+    QVector<QString> strings;
+    QVector<int> ints;
+    QVector<double> doubles;
 
     /**
      * @brief failMessage
@@ -204,9 +206,9 @@ public:
     explicit ValueListValidator(std::vector<double> val,QObject *parent = nullptr);
      explicit ValueListValidator(std::vector<int> val,QObject *parent = nullptr);
     explicit ValueListValidator(std::vector<QString> val,QObject *parent = nullptr);
-     ValueListValidator(std::vector<double> val);
-     ValueListValidator(std::vector<int> val);
-     ValueListValidator(std::vector<QString> val);
+     ValueListValidator(QVector<double> val);
+     ValueListValidator(QVector<int> val);
+     ValueListValidator(QVector<QString> val);
     /**
      * @brief operator ()
      * the overloaded function call '()' operator making UserPropertyValidator a functor. The overloaded operator takes a UserProperty (reference) and

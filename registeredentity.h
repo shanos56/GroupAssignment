@@ -88,6 +88,14 @@ public:
      */
    virtual QString getId () = 0;
 
+    /**
+    * @brief type
+    * type of entity this is
+    * @return 
+    * type of entity
+    */
+   virtual QString type() = 0;
+
 
 signals:
 
@@ -104,7 +112,8 @@ public slots:
      * signal when they are being deleted.
      * @param instance
      */
-    virtual void instanceDestroyed( std::shared_ptr<RegisteredEntity>  instance){}
+    virtual void instanceDestroyed2( std::shared_ptr<RegisteredEntity>  instance){}
+    virtual void instanceDestroyed( QString id ){}
 };
 
 }

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AssetForm</class>
+ <widget class="QDialog" name="AssetForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>497</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="addProperty_button">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>400</y>
+     <width>238</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add Custom Property</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="save_button">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>450</y>
+     <width>112</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancel_button">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>450</y>
+     <width>112</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>341</width>
+     <height>380</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="id_label">
+      <property name="text">
+       <string>ID:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="id">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="LastEditedBy_label">
+      <property name="text">
+       <string>Last Edited By:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLabel" name="LastEditedBy">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="name_label">
+      <property name="text">
+       <string>Name:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="Name"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="LastTimeEdited_label">
+      <property name="text">
+       <string>Last Time Edited:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QDateTimeEdit" name="lastTimeEdited"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="LastTimeEdited_label_2">
+      <property name="text">
+       <string>Purchase Date:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QDateTimeEdit" name="PurchaseDate"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="LastTimeEdited_label_3">
+      <property name="text">
+       <string>Serial No:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="SerialNo"/>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="Brand_label">
+      <property name="text">
+       <string>Brand:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="Brand"/>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="model_label">
+      <property name="text">
+       <string>Model:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="Model"/>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="PurchasePrice_label">
+      <property name="text">
+       <string>Purchase Price:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="PurchasePrice"/>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="DisposalDate_label">
+      <property name="text">
+       <string>Disposal Date:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QDateTimeEdit" name="DisposalDate"/>
+    </item>
+    <item row="10" column="1">
+     <widget class="QComboBox" name="Assettype"/>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="Assettype_label">
+      <property name="text">
+       <string>Asset Type:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="custodian_label">
+      <property name="text">
+       <string>Custodian:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="QComboBox" name="Custodian"/>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

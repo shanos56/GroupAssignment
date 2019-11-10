@@ -44,6 +44,9 @@ Q_OBJECT
     QMap<QString,std::shared_ptr<UserPropertyDefinition>> propertyDefinitions;
 
 
+
+
+
 public:
     AssetType() =default;
     /**
@@ -112,8 +115,10 @@ public:
      * @return
      * vector(array) of property definitions
      */
-    QVector<std::shared_ptr<UserPropertyDefinition>> getPropertyDefinition();
+    QVector<std::shared_ptr<UserPropertyDefinition>> getPropertyDefinitions();
 
+
+    QVector<QString> getPropertyDefinitionNames();
     /**
      * @brief getPropertyDefintion
      * copy of defintion
@@ -165,6 +170,11 @@ public:
      *  entities id
      */
     QString getId () override;
+    
+    QString type() override;
+
+    QDateTime getDateTime();
+    QString getLastEditedBy ();
 
 
 public slots:
@@ -179,7 +189,9 @@ public slots:
      * signal when they are being deleted.
      * @param instance
      */
-    void instanceDestroyed( std::shared_ptr<RegisteredEntity>  instance) override;
+    void instanceDestroyed2( std::shared_ptr<RegisteredEntity>  instance) override;
+
+    void instanceDestroyed( QString id ) override;
 
 
 };

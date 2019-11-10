@@ -3,12 +3,14 @@
 #include "registeredentity.h"
 #include "typeduserproperty.h"
 #include <QVariant>
+#include "concretevalidators.h"
 
 namespace core {
 class Custodian : public RegisteredEntity
 {
 
 
+    Q_OBJECT
     /**
      * @brief lastEditTime
      * a timestamp (QDateTime) that indicates when the last modification was made to the entity;
@@ -36,7 +38,7 @@ class Custodian : public RegisteredEntity
      * A UserProperty of type QString that restricts the allowable
      * values to the following: "Maintenance", "Operations", "Logistics"
      */
-    TypedUserProperty <QString> department;
+    std::shared_ptr<TypedUserProperty <QString>> department;
     /**
      * @brief phoneNumber
      * A UserProperty of type QString that restricts the allowable values to (mostly) valid phone numbers. The constraints are as follows:
@@ -48,7 +50,7 @@ class Custodian : public RegisteredEntity
      *   This allows values such as: 83026611, 8302 6611, 08 8302 6611, +61 8 8302 6611
      *   But NOT: 8302, 8302 6611 12345, 61+ 8 8302 6611, ext. 25000
      */
-    TypedUserProperty <QString> phoneNumber;
+    std::shared_ptr<TypedUserProperty <QString>> phoneNumber;
 
 public:
     Custodian(QString id);
@@ -77,14 +79,14 @@ public:
      * true - successfully set phone number
      * false - invalid phone number
      */
-    bool setPhoneNumber (TypedUserProperty<QString>);
+    bool setPhoneNumber (std::shared_ptr<TypedUserProperty <QString>>);
     /**
      * @brief getPhoneNumber
      * gets phone number of user or custodian
      * @return
      * userproperty string containing phone number
      */
-    TypedUserProperty<QString> getPhoneNumber();
+    std::shared_ptr<TypedUserProperty <QString>> getPhoneNumber();
 
     /**
      * @brief setName
@@ -93,7 +95,7 @@ public:
      * true - valid name set to custodian
      * false - invalid name
      */
-    bool setName(TypedUserProperty<QString>);
+    bool setName(std::shared_ptr<TypedUserProperty <QString>>);
     /**
      * @brief getName
      * gets name of custodian
@@ -110,10 +112,7 @@ public:
      * true - valid department set to custodian
      * false - invalid department
      */
-    bool setDepartment(TypedUserProperty<QString>);
-
-
-
+    bool setDepartment(std::shared_ptr<TypedUserProperty <QString>>);
 
     /**
      * @brief getDepartment
@@ -121,7 +120,7 @@ public:
      * @return
      *
      */
-    TypedUserProperty<QString> getDepartment ();
+    std::shared_ptr<TypedUserProperty <QString>> getDepartment ();
     /**
        * @brief setDateTime
        * sets the latest date time
@@ -160,6 +159,10 @@ public:
      * QDateTime
      */
     QDateTime getDateTime();
+    QString getLastEditedBy ();
+
+    QString type() override;
+
 
 
 

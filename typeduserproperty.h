@@ -16,7 +16,6 @@ template <class T>
 class TypedUserProperty : public UserProperty
 {
 
-
     /**
      * @brief definition
      * a reference to the UserPropertyDefintion that defines the 'type' of this UserProperty.
@@ -36,8 +35,7 @@ class TypedUserProperty : public UserProperty
     QString id;
 
 public:
-    explicit TypedUserProperty( std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
-    explicit TypedUserProperty(QString id, std::shared_ptr<UserPropertyDefinition> definition, QObject *parent);
+    TypedUserProperty(QString id, std::shared_ptr<UserPropertyDefinition> definition);
     TypedUserProperty(std::shared_ptr<UserPropertyDefinition> definition);
     TypedUserProperty() = default;
     TypedUserProperty(TypedUserProperty &);

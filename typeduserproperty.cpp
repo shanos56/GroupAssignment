@@ -3,12 +3,7 @@
 
 using namespace core;
 
-template <class T>
-TypedUserProperty<T>::TypedUserProperty( std::shared_ptr<UserPropertyDefinition> definition, QObject *parent) {
-    this->definition = definition;
-     this->setParent(parent);
 
-}
 template <class T>
 TypedUserProperty<T>::TypedUserProperty(TypedUserProperty &t) {
     this->id = t.id;
@@ -30,11 +25,14 @@ TypedUserProperty<T>::TypedUserProperty(std::shared_ptr<UserPropertyDefinition> 
 }
 
 template <class T>
-TypedUserProperty<T>::TypedUserProperty(QString id,std::shared_ptr<UserPropertyDefinition> definition,QObject *parent){
-    this->setParent(parent);
+TypedUserProperty<T>::TypedUserProperty(QString id, std::shared_ptr<UserPropertyDefinition> definition){
     this->id = id;
     this->definition = definition;
 }
+
+
+
+
 
 
 
@@ -75,13 +73,18 @@ T TypedUserProperty<T>::getValue() {
 template<class T>
 void TypedUserProperty<T>::setValue(QVariant val) {
 
+
     if constexpr(std::is_same<T,int>::value == true) {
+        emit valueChanged(this->_value,val);
         this->_value = val.toInt();
     } else if constexpr(std::is_same<T,QString>::value == true) {
+        emit valueChanged(this->_value,val);
         this->_value = val.toString();
     } else if constexpr(std::is_same<T,double>::value == true){
+        emit valueChanged(this->_value,val);
         this->_value = val.toDouble();
     }
+
 
 }
 
@@ -119,6 +122,7 @@ bool TypedUserProperty<T>::validate() {
     if (std::get<0>(res) == true)
         return true;
     else {
+        emit this->validationFailed(std::get<1>(res));
         return false;
     }
 }

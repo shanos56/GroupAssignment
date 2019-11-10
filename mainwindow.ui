@@ -47,26 +47,26 @@
      </attribute>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QListWidget" name="AssetTypes"/>
+       <widget class="QListWidget" name="AssetTypes_list"/>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="addAssetType_button">
           <property name="text">
            <string>Add</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="deleteAssetType_button">
           <property name="text">
            <string>Delete</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="editAssetType_button">
           <property name="text">
            <string>Edit</string>
           </property>
@@ -80,7 +80,7 @@
      <attribute name="title">
       <string>Custodians</string>
      </attribute>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -91,26 +91,26 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QListWidget" name="AssetTypes_2"/>
+        <widget class="QListWidget" name="Custodians_list"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QPushButton" name="pushButton_8">
+          <widget class="QPushButton" name="addCustodian_button">
            <property name="text">
             <string>Add</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_7">
+          <widget class="QPushButton" name="deleteCustodian_button">
            <property name="text">
             <string>Delete</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_9">
+          <widget class="QPushButton" name="editCustodian_button">
            <property name="text">
             <string>Edit</string>
            </property>

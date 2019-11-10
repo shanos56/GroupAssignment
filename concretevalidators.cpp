@@ -15,10 +15,13 @@ using namespace core;
  *
  *
  * */
+
 MinimumValueValidator::MinimumValueValidator(int val) {
     this->min = (double)val;
 
+
 }
+
 
 MinimumValueValidator::MinimumValueValidator(double val) {
     this->min = val;
@@ -89,16 +92,16 @@ QString MaximumValueValidator::failureMessage(UserProperty &property) {
  *
  * */
 
-ValueListValidator::ValueListValidator (std::vector<double> val) {
+ValueListValidator::ValueListValidator (QVector<double> val) {
     dataType = Double;
     this->doubles = val;
 }
 
-ValueListValidator::ValueListValidator (std::vector<QString> val) {
+ValueListValidator::ValueListValidator (QVector<QString> val) {
     dataType = Qstring;
     this->strings = val;
 }
-ValueListValidator::ValueListValidator (std::vector<int> val) {
+ValueListValidator::ValueListValidator (QVector<int> val) {
     dataType = Int;
     this->ints = val;
 }

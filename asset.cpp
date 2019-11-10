@@ -7,9 +7,18 @@ Asset::Asset(QString id, QObject *parent)
     this->id = id;
     this->setParent(parent);
 
+    QObject::connect(this,SIGNAL(instanceDestroyed(QString)),this->assetType.get(),SLOT(instanceDestroyed(QString)));
+
 
 }
 
+QString Asset::type() {
+    return "Asset";
+}
+
+Asset::~Asset()  {
+    emit instanceDestroyed(this->id);
+}
 
 
 Asset::Asset(QString id, std::shared_ptr<RegisteredEntity> assetType) {
@@ -143,3 +152,11 @@ QString Asset::getId () {
     return id;
 }
 
+
+QString Asset::getLastEditedBy() {
+    return this->lastEditedBy;
+}
+
+QDateTime Asset::getLastTimeEdited() {
+    return this->lastEditTime;
+}
