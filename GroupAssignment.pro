@@ -90,4 +90,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     Mainwindow.qml \
-    MainwindowForm.ui.qml
+    MainwindowForm.ui.qml \
+    README
