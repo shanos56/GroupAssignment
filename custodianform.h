@@ -16,12 +16,13 @@ class CustodianForm : public QDialog
 {
     Q_OBJECT
 
-    std::shared_ptr<AbstractAssetRegister> _reg;
+    std::shared_ptr<AbstractAssetRegister>& _reg;
     QString _id;
 
     std::shared_ptr<Custodian> custodian;
 
 
+    void setValues(QString id);
     void setPhoneNumber ();
     void setId();
     void setName();
@@ -37,7 +38,7 @@ class CustodianForm : public QDialog
     bool savelastEditedBy();
 
 public:
-    explicit CustodianForm(std::shared_ptr<AbstractAssetRegister> reg, QString id,QWidget *parent = nullptr);
+    explicit CustodianForm(std::shared_ptr<AbstractAssetRegister>& reg, QString id,QWidget *parent = nullptr);
     ~CustodianForm();
 
 
@@ -47,7 +48,10 @@ public:
 signals:
     void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
     void closeForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
-    void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
+    void openForm2(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
+
+public slots:
+    void recieveId(QString);
 
 private slots:
 
@@ -55,6 +59,8 @@ private slots:
     void on_save_button_clicked();
 
     void on_cancel_button_clicked();
+
+
 
 private:
     Ui::CustodianForm *ui;

@@ -5,6 +5,9 @@
 #include <QString>
 #include <QVariant>
 #include "userpropertyvalidator.h"
+#include <tuple>
+
+
 
 namespace core {
 class UserPropertyDefinition : public QObject
@@ -168,7 +171,7 @@ public slots:
      * success - tuple (true, "" )
      * failure - tuple (false, <failure message>)
      */
-    std::tuple<bool, QString> validate( std::shared_ptr<UserProperty> property);
+    std::tuple<bool,QString> validate( UserProperty& property);
 };
 
 }

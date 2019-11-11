@@ -2,9 +2,12 @@
 #define ASSETREGISTER_H
 
 #include "abstractassetregister.h"
+#include "commonentityfactory.h"
 namespace core {
 class AssetRegister : public AbstractAssetRegister
 {
+
+
 public:
     AssetRegister();
 

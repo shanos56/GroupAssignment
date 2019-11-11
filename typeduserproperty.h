@@ -2,6 +2,7 @@
 #define TYPEDUSERPROPERTY_H
 #include "userpropertydefinition.h"
 #include "userproperty.h"
+#include <tuple>
 
 namespace core {
 
@@ -95,6 +96,7 @@ public:
      QString getName();
 
      QString getId();
+     QString getErrorMessage();
 
 
 

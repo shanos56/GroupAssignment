@@ -22,141 +22,37 @@ class FormStatusHandler: public QObject
 
     QStack<FormStatus> status;
     QStack<std::shared_ptr<QDialog>> dialogs;
+    QStack<int> toBeDeleteddialogs;
     QApplication &_app;
 
     std::shared_ptr<AbstractAssetRegister> _reg;
 
-    std::shared_ptr<QMainWindow> _window;
+    std::shared_ptr<MainWindow> _window;
+
+
 
     bool mainWindowOpen = false;
 
+    void printStatus (UI::FormStatus stat = NULLSTATUS);
 
-    void addDialog (FormStatus stat, QString id = "") {
 
-        switch (stat) {
+    void addDialog (FormStatus stat, QString id = "");
 
-            case LOGIN: {
-                std::shared_ptr<QDialog>form {new Login(_reg,_window.get())};
-                this->dialogs.append(form);
-                QObject::connect(form.get(),SIGNAL(loginSuccess(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
-                QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
-                showWindow();
-                break;
-            }
+    void closeDialog(FormStatus stat);
 
-            case MAIN: {
-                this->_window = std::shared_ptr<QMainWindow>(new MainWindow(this->_reg));
-                this->dialogs.append(nullptr);
-                QObject::connect(this->_window.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
-                QObject::connect(this->_window.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
-                QObject::connect(this->_window.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
-                mainWindowOpen = true;
-                showWindow();
-                break;
-            }
+    std::shared_ptr<QDialog> getDialog(FormStatus stat);
 
-            case FormStatus::EDITASSETTYPE: {
-                std::shared_ptr<QDialog>form {new AssetTypeForm(_reg,id,_window.get())};
-                this->dialogs.append(form);
-                this->setSignals(form);
-                showWindow();
-                break;
-            }
-            
-        case FormStatus::EDITCUSTODIAN: {
-            std::shared_ptr<QDialog>form {new CustodianForm(_reg,id,_window.get())};
-            this->dialogs.append(form);
-             this->setSignals(form);
-            showWindow();
-            break;
-        }
+   void  printDialog();
 
-        case FormStatus::EDITASSET: {
-            std::shared_ptr<QDialog>form {new AssetForm(_reg,id,_window.get())};
-            this->dialogs.append(form);
-            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
-            QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
-            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
-            showWindow();
-            break;
-        }
+    void showWindow();
 
-        case FormStatus::USERPROPERTY: {
-            std::shared_ptr<QDialog>form {new UserPropertyForm(_reg,id,_window.get())};
-            this->dialogs.append(form);
-            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
-            QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
-            QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
-            showWindow();
-            break;
-        }
-        default:
-            break;
+    void hideWindow(int at);
 
-        }
-    }
+    bool closeDialog(int index);
 
-    void closeDialog(FormStatus stat) {
-        this->closeDialog(this->status.indexOf(stat));
+    void closeApplication ();
 
-    }
-
-    void showWindow() {
-        if (this->getStatus() == MAIN) {
-            if (this->status.size() > 1) {
-                auto dia = this->dialogs.at(this->dialogs.size()-2).get();
-                if (!dia->isHidden())
-                    dia->hide();
-            }
-            _window->show();
-        } else {
-            if (this->status.size() > 1) {
-                qDebug()<<"show window";
-
-                hideWindow(this->dialogs.size()-2);
-            }
-            this->dialogs.last()->show();
-        }
-
-    }
-
-    void hideWindow(int at) {
-        auto dia = this->dialogs.at(at).get();
-        if (dia == nullptr) {
-            qDebug() << "main window hidden";
-            this->_window->hide();
-        } else if (!dia->isHidden()) {
-            dia->hide();
-        }
-
-    }
-
-    bool closeDialog(int index) {
-
-       if (index != -1 && index <= dialogs.size()) {
-            auto form = this->dialogs.at(index).get();
-            if (form == nullptr) {
-                this->_window->disconnect();
-                this->_window->close();
-            }else {
-                form->disconnect();
-                form->close();
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    void closeApplication () {
-        QApplication::exit();
-    }
-
-    void setSignals(std::shared_ptr<QDialog> form) {
-        QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus)),this,SLOT(setStatus(UI::FormStatus)));
-        QObject::connect(form.get(),SIGNAL(closeForm(UI::FormStatus)),this,SLOT(closeStatus(UI::FormStatus)));
-        QObject::connect(form.get(),SIGNAL(openForm(UI::FormStatus,QString)),this,SLOT(setStatus(UI::FormStatus, QString)));
-    }
+    void setSignals(std::shared_ptr<QDialog> form);
 
 
 public:
@@ -166,30 +62,22 @@ public:
 
     }
 
-    FormStatus getStatus() const {
-        if (this->status.isEmpty() && this->mainWindowOpen)
-            return UI::FormStatus::MAIN;
-        else if (!this->status.isEmpty()) {
-            return this->status.top();
-        } else {
-            return UI::FormStatus::NULLSTATUS;
-        }
+    FormStatus getStatus();
+
+    void onload ();
 
 
-    }
-
-    void onload () {
-
-        this->_reg = core::AbstractAssetRegister::instance<AssetRegister>();
-        setStatus(LOGIN);
-    }
-
-
+signals:
+    void sendIdToCustodian(QString id);
+    void sendIdToAssetType(QString id);
+    void sendIdToAsset(QString id);
 
 public slots:
     void setStatus(UI::FormStatus stat);
-    void setStatus(UI::FormStatus stat, QString id);
+    void setStatus2(UI::FormStatus stat, QString id);
     void closeStatus(UI::FormStatus stat = NULLSTATUS);
+
+
 
 
 

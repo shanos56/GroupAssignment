@@ -59,6 +59,9 @@ QString AssetRegister::generateId(){
  *  get factory
  */
 std::shared_ptr<AbstractEntityFactory> AssetRegister::getFactory(){
+    if (this->_entityFactory == nullptr) {
+        this->_entityFactory.reset (new CommonEntityFactory());
+    }
     return this->_entityFactory;
 }
 /**
@@ -71,12 +74,20 @@ The type is not specified as this may be defined as a single function using inhe
  */
 bool AssetRegister::storeEntity(std::shared_ptr<RegisteredEntity> entity){
 
-    for(auto it = this->_entities.begin();it != this->_entities.end();it++) {
-        if ( it->get()->getId().compare(entity->getId()) == 0) {
-            return false;
-        }
+    if (!this->_entities.isEmpty()) {
+
+            for (auto a : this->_entities) {
+
+                if (a != nullptr) {
+                    if (a->getId().compare(entity->getId()) == 0)
+                        return false;
+                }
+            }
+
     }
-    this->_entities.push_back(entity);
+    auto a = std::dynamic_pointer_cast<RegisteredEntity>(entity);
+
+    this->_entities.push_back(std::move(a));
     return true;
 }
 /**
@@ -108,12 +119,14 @@ std::shared_ptr<core::RegisteredEntity> AssetRegister::retrieveEntity(QString id
  */
 bool AssetRegister::deleteEntity(QString id){
 
-    for (auto i = this->_entities.begin(); i != this->_entities.end(); i++) {
+    if (!this->_entities.isEmpty()) {
+        for (auto i = this->_entities.begin(); i != this->_entities.end(); i++) {
 
-       if ( i->get()->getId().compare(id) == 0) {
-           i->reset();
-           this->_entities.erase(i);
-       }
+           if ( i->get()->getId().compare(id) == 0) {
+               this->_entities.erase(i);
+               return true;
+           }
+        }
     }
     return false;
 }

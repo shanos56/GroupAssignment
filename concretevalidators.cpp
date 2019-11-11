@@ -206,7 +206,6 @@ PhoneNumberValidator::PhoneNumberValidator() {
 }
 bool PhoneNumberValidator::validValue (const QChar i) const {
      char validValues[] = {'0','1','2','3','4','5','6','7','8','9',' ','\0'};
-
      for (char a : validValues) {
         if (i == a)
             return true;
@@ -217,6 +216,8 @@ bool PhoneNumberValidator::validValue (const QChar i) const {
 // chose not to use regex
 // don't know how to create proper error message
 bool PhoneNumberValidator::value(QString val) {
+
+
     int spaces = 0;
     for (int i = 0 ; i < val.size();i++) {
         //check first value is a +

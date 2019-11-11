@@ -1,7 +1,7 @@
 #include "assetform.h"
 #include "ui_assetform.h"
 
-AssetForm::AssetForm(std::shared_ptr<AbstractAssetRegister> reg, QString id,QWidget *parent) :
+AssetForm::AssetForm(std::shared_ptr<AbstractAssetRegister>& reg, QString id,QWidget *parent) :
     QDialog(parent),
     _reg(reg),
     _id(id),
@@ -9,14 +9,8 @@ AssetForm::AssetForm(std::shared_ptr<AbstractAssetRegister> reg, QString id,QWid
 {
     ui->setupUi(this);
 
-    std::shared_ptr<RegisteredEntity> entity(_reg->retrieveEntity(id));
-
-    if (entity != nullptr && entity->type().compare("Asset") == 0) {
-        _asset.reset(dynamic_cast<Asset *>(entity.get()));
-    } else {
-        QMessageBox::warning(this,"Error", "Invalid entity given. Either does not exist or is not asset.");
-        emit closeForm(UI::EDITASSET);
-    }
+    this->setWindowTitle("Asset");
+    onload();
 }
 
 AssetForm::~AssetForm()
@@ -24,10 +18,29 @@ AssetForm::~AssetForm()
     delete ui;
 }
 
+void AssetForm::onload () {
+
+
+    _asset.reset();
+    std::shared_ptr<RegisteredEntity> entity(_reg->retrieveEntity(_id));
+    _asset = std::dynamic_pointer_cast<Asset>(entity);
+
+    setId();
+    this->purchaseDate();
+    this->purchasePrice();
+    this->model();
+    this->brand();
+    this->serialNo();
+    this->assetType();
+    this->custodian();
+    this->disposalDate();
+    this->lastEditedBy();
+    this->lastTimeEdited();
+
+}
 
 void AssetForm::setId() {
     ui->id->setText(_asset->getId());
-
 }
 
 void AssetForm::purchaseDate() {
@@ -119,10 +132,10 @@ bool AssetForm::saveDisposalDate() {
     
 }
 bool AssetForm::saveAssetType() {
-    auto i = this->_reg->retrieveEntity(ui->Assettype->currentData().toString());
+    auto i = this->_reg->retrieveEntity(ui->Assettype->currentText());
     
     if (i != nullptr) {
-        _asset->setAssetType(i);
+        _asset->setAssetType(std::dynamic_pointer_cast<AssetType>(i));
         return true;
     } else {
         return false;
@@ -140,14 +153,15 @@ void AssetForm::saveLastTimeEdited() {
 void AssetForm::custodian() {
 
     auto list = _reg.get()->allEntities();
-    int index = -1;
+    int index = 0;
     if (!list.isEmpty()) {
         for (auto a = list.begin(); a != list.end();a++){
             if (a->get()->type().compare("Custodian") == 0) {
-                std::shared_ptr<Custodian> cus(dynamic_cast<Custodian *>(a->get()));
-                ui->Custodian->addItem(cus->getName(),a->get()->getId());
-                if (a->get()->getId().compare( _asset->getCustodian()->getId()) == 0)
-                     index = ui->Custodian->count() - 1;
+                ui->Custodian->addItem(a->get()->getId());
+                if (_asset->getCustodian() != nullptr) {
+                    if (a->get()->getId().compare( _asset->getCustodian()->getId()) == 0)
+                         index = ui->Custodian->count() - 1;
+                }
             }
         }
      }
@@ -157,36 +171,49 @@ void AssetForm::custodian() {
 }
 
 bool AssetForm::saveCustodian() {
-    if (ui->Custodian->currentData().toString().compare(_asset->getCustodian()->getId()) != 0) {
-        auto i = this->_reg->retrieveEntity(ui->Custodian->currentData().toString());
-
-        if (i != nullptr) {
-            _asset->setCustodian(std::shared_ptr<Custodian>(dynamic_cast<Custodian *>(i.get())));
-            return true;
-        } else {
-            return false;
+    if (_asset->getCustodian()!= nullptr) {
+        if (ui->Custodian->currentText().compare(_asset->getCustodian()->getId()) != 0) {
+            auto i = this->_reg->retrieveEntity(ui->Custodian->currentText());
+            if (i != nullptr) {
+                _asset->setCustodian(std::dynamic_pointer_cast<Custodian>(i));
+                return true;
+            } else {
+                return false;
+            }
         }
+
+    }else if (ui->Custodian->currentText().compare("")) {
+        return true;
     }
-    return true;
+   return false;
 
 }
 void AssetForm::on_addProperty_button_clicked()
 {
-    emit openForm(UI::USERPROPERTY,this->_id);
+    QMessageBox::warning(this,"Unimplemented","This feature was implemented but I was unable to complete error checking in time.");
 }
 
 void AssetForm::on_save_button_clicked()
 {
-
-    if (this->saveBrand() && this->saveModel() && saveSerialNo() && saveAssetType() && saveCustodian() && saveDisposalDate())  {
-        saveLastEditedBy();
-        saveLastTimeEdited();
-        emit closeForm(UI::EDITASSET);
-    }
+    this->saveBrand();
+    this->saveModel();
+    saveSerialNo();
+    saveAssetType();
+    saveDisposalDate();
+    saveCustodian();
+    saveLastEditedBy();
+    saveLastTimeEdited();
+    on_cancel_button_clicked();
 
 }
 
 void AssetForm::on_cancel_button_clicked()
 {
     emit closeForm(UI::EDITASSET);
+}
+
+void AssetForm::recieveId(QString id) {
+
+    this->_id = id;
+    this->onload();
 }

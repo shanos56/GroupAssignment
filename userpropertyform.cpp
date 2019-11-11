@@ -85,7 +85,7 @@ void UserPropertyForm::addMaximumValidator() {
         if (reply.size() == 0 || ok == false) {
             QMessageBox::warning(this,"Error","Invalid Value inputted.");
         } else {
-           this->_currentValidator.reset(new MaximumValueValidator(val,this));
+           this->_currentValidator.reset(new MaximumValueValidator(val));
 
         }
     }
@@ -127,12 +127,12 @@ void UserPropertyForm::saveValue() {
 void UserPropertyForm::on_AddProperty_button_clicked()
 {
     this->saveValue();
-    closeForm(UI::USERPROPERTY);
+    closeForm(UI::NULLSTATUS);
 }
 
 void UserPropertyForm::on_cancel_button_clicked()
 {
-    closeForm(UI::USERPROPERTY);
+    closeForm(UI::NULLSTATUS);
 }
 
 void UserPropertyForm::on_addValidator_button_clicked()

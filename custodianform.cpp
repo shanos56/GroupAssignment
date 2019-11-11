@@ -1,7 +1,7 @@
 #include "custodianform.h"
 #include "ui_custodianform.h"
 
-CustodianForm::CustodianForm(std::shared_ptr<AbstractAssetRegister> reg, QString id,QWidget *parent) :
+CustodianForm::CustodianForm(std::shared_ptr<AbstractAssetRegister>& reg, QString id,QWidget *parent) :
     QDialog(parent),
     _reg{reg},
     _id{id},
@@ -9,7 +9,10 @@ CustodianForm::CustodianForm(std::shared_ptr<AbstractAssetRegister> reg, QString
 
 {
     ui->setupUi(this);
-    custodian = std::shared_ptr<Custodian>(dynamic_cast<Custodian *>(_reg->retrieveEntity(_id).get()));
+
+
+    this->setWindowTitle("Custodian");
+     this->setValues(id);
 }
 
 CustodianForm::~CustodianForm()
@@ -20,7 +23,8 @@ CustodianForm::~CustodianForm()
 
 void CustodianForm::setPhoneNumber () {
     ui->phonenumber->clear();
-    ui->phonenumber->insert(custodian->getPhoneNumber()->getValue());
+    if (custodian->getPhoneNumber() != nullptr)
+        ui->phonenumber->insert(custodian->getPhoneNumber()->getValue());
 
 }
 void CustodianForm::setId() {
@@ -35,15 +39,25 @@ void CustodianForm::setName() {
 }
 void CustodianForm::setDepartment() {
     ui->department->clear();
-    int index = 0;
+    QString dep = "";
+    if (custodian->getDepartment() != nullptr){
+        dep = custodian->getDepartment()->getValue();
+    }
+
     for (QString i : UI::departments) {
         ui->department->addItem(i,i);
 
     }
-
-    if ((index = ui->department->findText(custodian->getDepartment()->getValue())) != -1) {
-        ui->department->setCurrentIndex(index);
+    if (dep.compare("") != 0) {
+        ui->department->setCurrentText(dep);
+    } else {
+        ui->department->setCurrentIndex(0);
     }
+
+
+
+
+
 
 
 }
@@ -66,29 +80,43 @@ bool CustodianForm::savePhoneNumber() {
 
     std::shared_ptr<UserPropertyDefinition> definit (new UserPropertyDefinition(_reg->generateId(),custodian.get()));
 
+
     definit->addValidator("Phone",std::shared_ptr<UserPropertyValidator>(new PhoneNumberValidator ()));
+
     std::shared_ptr<TypedUserProperty<QString>> phone(new  TypedUserProperty<QString>(_reg->generateId(),definit));
 
-    phone->setValue(ui->phonenumber->text());
 
-    connect(phone.get(),SIGNAL(validationFailed(QString)),this,SLOT(validationFailed(QString)));
+    phone->setValue(QString(ui->phonenumber->text()));
+
 
     if (phone->validate()) {
-        custodian->setDepartment(phone);
+
+        custodian->setPhoneNumber(phone);
         return true;
     } else {
+        QMessageBox::warning(this,"Phone Error",phone->getErrorMessage());
         return false;
     }
 
 }
 bool CustodianForm::saveName() {
 
-     std::shared_ptr<UserPropertyDefinition> definit (new UserPropertyDefinition(_reg->generateId(),custodian.get()));
+    if (ui->Name->text().compare("") == 0) {
+            QMessageBox::warning(this,"Name Error","A Custodian requires a name");
+            return false;
+    }
 
-    std::shared_ptr<TypedUserProperty<QString>> prop(new TypedUserProperty<QString>(_reg->generateId(),definit));
-    custodian->setName(prop);
+    auto  definit = std::make_shared<UserPropertyDefinition> (_reg->generateId(),custodian.get());
 
-    return true;
+    auto  prop = std::make_shared<TypedUserProperty<QString> >(_reg->generateId(),definit);
+
+    prop->setValue(QString(ui->Name->text()));
+
+    if (custodian->setName(prop) ) {
+        return true;
+    }
+        return false;
+
 }
 
 bool CustodianForm::savelastEditedBy() {
@@ -99,30 +127,34 @@ bool CustodianForm::saveDepartment() {
 
     std::shared_ptr<UserPropertyDefinition> definit (new UserPropertyDefinition(_reg->generateId(),custodian.get()));
 
-    definit->addValidator("Phone",std::shared_ptr<UserPropertyValidator>(new DepartmentValidator ()));
+    definit->addValidator("Department",std::shared_ptr<UserPropertyValidator>(new DepartmentValidator ()));
      std::shared_ptr<TypedUserProperty<QString>> department(new  TypedUserProperty<QString>(_reg->generateId(),definit));
 
-    department->setValue(ui->department->currentText());
+
+     department->setValue(QString(ui->department->currentText()));
 
     if (department->validate()) {
         custodian->setDepartment(department);
         return true;
     } else {
+        QMessageBox::warning(this,"Department Error",department->getErrorMessage());
         return false;
     }
+
 }
 bool CustodianForm::saveLastTimeEdited() {
 
-    custodian->setDateTime(ui->lastTimeEdited->dateTime());
+    custodian->setDateTime();
     return true;
 }
 
 
 
-
 void CustodianForm::on_save_button_clicked()
 {
-    if (!saveName()) {
+
+
+    if (!this->saveName()){
         return;
     } else if (!saveDepartment()) {
         return;
@@ -133,9 +165,22 @@ void CustodianForm::on_save_button_clicked()
     }
 
     savelastEditedBy();
-    emit closeForm(UI::EDITCUSTODIAN);
+    on_cancel_button_clicked();
 
 
+}
+
+void CustodianForm::setValues(QString id) {
+
+    this->_id = id;
+    custodian.reset();
+    custodian = std::dynamic_pointer_cast<Custodian>(_reg->retrieveEntity(_id));
+    this->setId();
+    this->setName();
+    this->setDepartment();
+    this->setPhoneNumber();
+    this->setLastEditedBy();
+    this->setLastTimeEdited();
 }
 
 void CustodianForm::on_cancel_button_clicked()
@@ -147,4 +192,9 @@ void CustodianForm::on_cancel_button_clicked()
 
 void CustodianForm::validationFailed(QString error) {
     QMessageBox::warning(this,"Error",error);
+}
+
+void CustodianForm::recieveId(QString id) {
+
+    this->setValues(id);
 }

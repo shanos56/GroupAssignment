@@ -57,7 +57,7 @@ public:
      * true - meets minimum standard
      * false - fails to meet standard
      */
-    bool operator()(UserProperty &userProperty) override;
+    bool operator()( UserProperty &userProperty) override;
 
 
     /**
@@ -113,8 +113,6 @@ class MaximumValueValidator: public UserPropertyValidator {
     bool value (double val);
 
 public:
-   explicit MaximumValueValidator(int val,QObject *parent = nullptr);
-    explicit MaximumValueValidator(double val,QObject *parent = nullptr);
     MaximumValueValidator(double val);
     MaximumValueValidator(int val);
     /**
@@ -314,7 +312,7 @@ public:
      * @return
      * string containing failure message
      */
-    QString failureMessage( UserProperty &property) override;
+    QString failureMessage(UserProperty &property) override;
 };
 /**
  * @brief The PhoneNumberValidator class

@@ -7,7 +7,8 @@ Asset::Asset(QString id, QObject *parent)
     this->id = id;
     this->setParent(parent);
 
-    QObject::connect(this,SIGNAL(instanceDestroyed(QString)),this->assetType.get(),SLOT(instanceDestroyed(QString)));
+    if (assetType != nullptr)
+        QObject::connect(this,SIGNAL(instanceDestroyed(QString)),this->assetType.get(),SLOT(instanceDestroyed(QString)));
 
 
 }
@@ -24,11 +25,13 @@ Asset::~Asset()  {
 Asset::Asset(QString id, std::shared_ptr<RegisteredEntity> assetType) {
     this->id = id;
     this->assetType = assetType;
+    QObject::connect(this,SIGNAL(instanceDestroyed(QString)),this->assetType.get(),SLOT(instanceDestroyed(QString)));
 }
 
 
 bool Asset::purchaseAsset (QDateTime time) {
     this->purchaseDate = time;
+    return true;
 }
 QDateTime Asset::getPurchaseDate() {
 
@@ -113,7 +116,8 @@ std::shared_ptr<UserProperty> Asset::getUserProperty(QString name){
 }
 
 void Asset::userPropertyChanged(QVariant newValue, QVariant oldValue){
-
+newValue.clear();
+oldValue.clear();
 }
 
 /**

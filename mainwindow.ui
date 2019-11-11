@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="Assets">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -30,7 +30,7 @@
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="AssetTypesTab">
      <property name="sizePolicy">
@@ -119,6 +119,21 @@
         </layout>
        </item>
       </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Assets</string>
+     </attribute>
+     <widget class="QListWidget" name="Asset_list">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>531</width>
+        <height>246</height>
+       </rect>
+      </property>
      </widget>
     </widget>
    </widget>

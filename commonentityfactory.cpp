@@ -24,7 +24,7 @@ CommonEntityFactory::CommonEntityFactory(){
 **/
 std::shared_ptr<Custodian> CommonEntityFactory::createCustodian( QString id, QMap <QString, QVariant> parameters, QObject *parent) {
 
-    std::shared_ptr<Custodian> custodian {new core::Custodian(id,parent)};
+   auto custodian = std::make_shared<Custodian>(id,parent);
 
     for (auto i = parameters.begin(); i != parameters.end(); i++) {
          if (i.key().compare("DateTime") == 0) {
@@ -52,16 +52,19 @@ std::shared_ptr<Custodian> CommonEntityFactory::createCustodian( QString id, QMa
   */
 std::shared_ptr<AssetType> CommonEntityFactory::createAssetType( QString id, QMap <QString, QVariant> parameters, QObject *parent){
 
+
     std::shared_ptr<AssetType> assetType {new AssetType(id,parent)};
 
-    for (auto i = parameters.begin(); i != parameters.end(); i++) {
-         if (i.key().compare("DateTime") == 0) {
-            assetType.get()->setDateTime(i.value().toDateTime());
-         } else if (i.key().compare("lastEditedBy") == 0) {
-             assetType.get()->setLastEditedBy(i.value().toString());
-         }
-    }
 
+    if (!parameters.isEmpty()) {
+        for (auto i = parameters.begin(); i != parameters.end(); i++) {
+             if (i.key().compare("DateTime") == 0) {
+                assetType.get()->setDateTime(i.value().toDateTime());
+             } else if (i.key().compare("lastEditedBy") == 0) {
+                 assetType.get()->setLastEditedBy(i.value().toString());
+             }
+        }
+    }
     return assetType;
 }
 
@@ -81,8 +84,9 @@ std::shared_ptr<AssetType> CommonEntityFactory::createAssetType( QString id, QMa
   */
 std::shared_ptr<Asset> CommonEntityFactory::createAsset( std::shared_ptr<AssetType> type, QString id, QMap <QString, QVariant> parameters, QObject *parent){
 
-    std::shared_ptr<Asset> a {new Asset(id,parent)};
+    auto a = std::make_shared<Asset> (id,parent);
     a->setAssetType(type);
+
     for (auto it = parameters.begin(); it != parameters.end() ; it++) {
         if (it.key().compare("Username") == 0)
             a.get()->setLastEditedBy(it.value().toString());
@@ -95,6 +99,7 @@ std::shared_ptr<Asset> CommonEntityFactory::createAsset( std::shared_ptr<AssetTy
         }else if (it.key().compare("Model") == 0)
             a->setModel(it.value().toString());
     }
+     type->addAsset(a);
     return a;
 
 }
@@ -135,6 +140,9 @@ other values deemed necessary to correctly construct the object.
 */
 
 std::shared_ptr<UserProperty> CommonEntityFactory::createProperty( std::shared_ptr<UserPropertyDefinition> definition, QString id, QMap <QString, QVariant> parameters, QObject *parent){
+
+    if (parent == nullptr) {}
+
     auto it = parameters.find("type");
     std::shared_ptr<UserProperty> a(new TypedUserProperty<QString>(id,definition));
     QString type = "QString";
@@ -149,6 +157,7 @@ std::shared_ptr<UserProperty> CommonEntityFactory::createProperty( std::shared_p
     }
     for (auto it = parameters.begin(); it != parameters.end();it++) {
         if (it.key().compare("value") == 0){
+
              a->setValue(it.value());
         }
     }

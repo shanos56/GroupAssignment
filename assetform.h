@@ -16,6 +16,8 @@ class AssetForm : public QDialog
 {
     Q_OBJECT
 
+
+    void onload ();
     void setId();
     void purchaseDate();
     void serialNo();
@@ -41,20 +43,23 @@ class AssetForm : public QDialog
 
 
 
-    std::shared_ptr<AbstractAssetRegister> _reg;
+    std::shared_ptr<AbstractAssetRegister>& _reg;
     QString _id;
     std::shared_ptr<Asset> _asset;
 
 public:
-    explicit AssetForm(std::shared_ptr<AbstractAssetRegister> reg, QString id, QWidget *parent = nullptr);
+    explicit AssetForm(std::shared_ptr<AbstractAssetRegister>& reg, QString id, QWidget *parent = nullptr);
     ~AssetForm();
 
 
 signals:
     void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
     void closeForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
-    void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
+    void openForm2(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
 
+
+public slots:
+    void recieveId(QString);
 private slots:
     void on_addProperty_button_clicked();
 

@@ -176,6 +176,8 @@ public:
     QDateTime getDateTime();
     QString getLastEditedBy ();
 
+    bool addAsset(std::shared_ptr<Asset> asset);
+
 
 public slots:
     /**

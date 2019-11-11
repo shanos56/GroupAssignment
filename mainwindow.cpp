@@ -2,8 +2,10 @@
 #include "ui_mainwindow.h"
 #include <memory>
 #include <QMessageBox>
+#include "custodianform.h"
+#include "custodian.h"
 
-MainWindow::MainWindow(std::shared_ptr<AbstractAssetRegister> reg,QWidget *parent) :
+MainWindow::MainWindow(std::shared_ptr<AbstractAssetRegister>& reg,QWidget *parent) :
     QMainWindow(parent),
     _reg{reg},
     ui(new Ui::MainWindow)
@@ -12,6 +14,7 @@ MainWindow::MainWindow(std::shared_ptr<AbstractAssetRegister> reg,QWidget *paren
 
 
     this->fillList();
+    this->setWindowTitle("Dashboard");
 
 
 }
@@ -22,28 +25,25 @@ void MainWindow::fillList() {
     if (!list.isEmpty()) {
         for (auto i = list.begin();i != list.end();i++) {
             if (i->get()->type().compare("Custodian") == 0) {
-                QListWidgetItem *a = new QListWidgetItem();
-
-                std::shared_ptr<Custodian> custodian(dynamic_cast<Custodian *>(i->get()));
-                a->setData(Qt::DisplayRole,QVariant(custodian->getId()));
-                a->setText(custodian->getName());
-                ui->Custodians_list->addItem(a);
-
+                ui->Custodians_list->addItem(i->get()->getId());
             } else if (i->get()->type().compare("AssetType") == 0) {
-                QListWidgetItem *a = new QListWidgetItem();
-                std::shared_ptr<AssetType> assetType(dynamic_cast<AssetType *>(i->get()));
-                a->setData(Qt::DisplayRole,QVariant(assetType->getId()));
-                a->setText(assetType->getId());
-                ui->AssetTypes_list->addItem(a);
+                ui->AssetTypes_list->addItem(i->get()->getId());
+            } else if (i->get()->type().compare("Asset") == 0) {
+                ui->Asset_list->addItem(i->get()->getId());
             }
         }
     }
+
+    if (ui->Asset_list->count() == 0) {
+        ui->Asset_list->addItem("No Assets in asset Registry.");
+    }
+
 
     if (ui->AssetTypes_list->count() == 0) {
         ui->AssetTypes_list->addItem("No Asset Types in asset Registry.");
     }
     if (ui->Custodians_list->count() == 0) {
-         ui->AssetTypes_list->addItem("No Custodians in asset Registry.");
+         ui->Custodians_list->addItem("No Custodians in asset Registry.");
     }
 
 }
@@ -51,6 +51,7 @@ void MainWindow::fillList() {
 void MainWindow::updateList() {
     ui->AssetTypes_list->clear();
     ui->Custodians_list->clear();
+    ui->Asset_list->clear();
     this->fillList();
 }
 
@@ -58,21 +59,24 @@ bool MainWindow::deleteCustodian() {
 
     auto list = ui->Custodians_list->selectedItems();
 
-    QMessageBox::StandardButton reply = QMessageBox::question(this,"Are you sure.","Are you sure you want to delete "+ QString(list.length())+" Custodians?",
+    QMessageBox::StandardButton reply = QMessageBox::question(this,"Are you sure.","Are you sure you want to delete "+ QString::number(list.length())+" Custodians?",
                           QMessageBox::Yes |QMessageBox::No );
     if (reply == QMessageBox::Yes) {
         int failures = 0;
         int success = 0;
+
         for (auto i = list.begin();i != list.end();i++) {
-           QString val = i.i->t()->data(Qt::DisplayRole).toString();
-           if (!_reg.get()->deleteEntity(val))
+
+           QString val = i.i->t()->text();
+           if (!_reg.get()->deleteEntity(val)) {
+
                failures++;
-           else {
+           } else {
                success++;
            }
         }
         if (failures > 0) {
-            QMessageBox::warning(this,"Failure","Unable to delete "+QString(failures)+" Custodians.");
+            QMessageBox::warning(this,"Failure","Unable to delete "+QString::number(failures)+" Custodians.");
         }
         this->updateList();
         return true;
@@ -83,7 +87,7 @@ bool MainWindow::deleteCustodian() {
 void MainWindow::editCustodian() {
 
     if (ui->Custodians_list->selectedItems().count() == 1) {
-        this->openForm(UI::FormStatus::EDITCUSTODIAN,ui->Custodians_list->selectedItems().first()->data(Qt::DisplayRole).toString());
+        emit this->openForm2(UI::FormStatus::EDITCUSTODIAN,ui->Custodians_list->selectedItems().first()->text());
     }else if (ui->Custodians_list->selectedItems().count() > 1) {
         QMessageBox::warning(this,"Invalid items.", "Can only edit one custodian at a time.",QMessageBox::Ok);
     } else if (ui->Custodians_list->selectedItems().count()  == 0) {
@@ -100,7 +104,8 @@ void MainWindow::addCustodian() {
 
     QString id = this->_reg->generateId();
     this->_reg->storeEntity(this->_reg->getFactory()->createCustodian( id,params,this->_reg.get()));
-    this->openForm(UI::EDITCUSTODIAN,id);
+
+    emit this->openForm2(UI::EDITCUSTODIAN,id);
 }
 
 
@@ -131,11 +136,11 @@ bool MainWindow::deleteAssetType() {
 }
 void MainWindow::editAssetType() {
     if (ui->AssetTypes_list->selectedItems().count() == 1) {
-        this->openForm(UI::FormStatus::EDITCUSTODIAN,ui->AssetTypes_list->selectedItems().first()->data(Qt::DisplayRole).toString());
+        emit this->openForm2(UI::FormStatus::EDITASSETTYPE,ui->AssetTypes_list->selectedItems().first()->text());
     }else if (ui->AssetTypes_list->selectedItems().count() > 1) {
-        QMessageBox::warning(this,"Invalid items.", "Can only edit one custodian at a time.",QMessageBox::Ok);
+        QMessageBox::warning(this,"Invalid items.", "Can only edit one Asset type at a time.",QMessageBox::Ok);
     } else if (ui->AssetTypes_list->selectedItems().count()  == 0) {
-        QMessageBox::warning(this,"Invalid items.", "Please select a custodian.",QMessageBox::Ok);
+        QMessageBox::warning(this,"Invalid items.", "Please select an asset type.",QMessageBox::Ok);
     }
 
 }
@@ -145,9 +150,14 @@ void MainWindow::addAssetType() {
     params.insert("DateTime",QVariant(QDateTime::currentDateTime()));
     params.insert("LastEditedBy",QVariant(this->_reg->username()));
 
+
     QString id = this->_reg->generateId();
+
+    auto a = this->_reg->getFactory();
+
     this->_reg->storeEntity(this->_reg->getFactory()->createAssetType(id,params,this->_reg.get()));
-    this->openForm(UI::EDITASSETTYPE,id);
+
+    emit openForm2(UI::EDITASSETTYPE,id);
 }
 
 

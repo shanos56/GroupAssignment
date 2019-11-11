@@ -50,7 +50,7 @@ public:
 signals:
     void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
     void closeForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
-    void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
+    void openForm2(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
 
 private slots:
     void on_validator_currentIndexChanged(const QString &arg1);

@@ -106,6 +106,7 @@ void TypedUserProperty<T>::setName (QString name) {
   * @param val
   * value to set
   */
+
 template <class T>
 void TypedUserProperty<T>::setValue (T val) {
     _value = val;
@@ -117,15 +118,40 @@ void TypedUserProperty<T>::setValue (T val) {
   */
 template <class T>
 bool TypedUserProperty<T>::validate() {
-    std::tuple<bool,QString> res = this->definition.get()->validate(std::shared_ptr<TypedUserProperty>(this));
 
-    if (std::get<0>(res) == true)
+
+    bool res;
+    QString message;
+
+    std::tie(res,message) = this->definition.get()->validate(*this);
+
+    if (res == true)
         return true;
     else {
-        emit this->validationFailed(std::get<1>(res));
+        emit this->validationFailed(message);
         return false;
     }
+
 }
+
+template <class T>
+QString  TypedUserProperty<T>::getErrorMessage() {
+
+
+
+    bool res;
+    QString message;
+
+    std::tie(res,message) = this->definition.get()->validate(*this);
+
+    if (res == true)
+        return QString("");
+    else {
+        return message;
+
+    }
+}
+
 
 template <class T>
 QString TypedUserProperty<T>::getId() {

@@ -5,10 +5,12 @@
 
 Login::Login(std::shared_ptr<AbstractAssetRegister> reg, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Login),
-    _reg(reg)
+    _reg(reg),
+    ui(new Ui::Login)
+
 {
     ui->setupUi(this);
+    this->setWindowTitle("Login");
 }
 
 Login::~Login()
@@ -27,19 +29,21 @@ void Login::on_pushButton_Quit_clicked()
 void Login::on_pushButton_login_clicked()
 {
     QString _user = ui->lineEdit_username->text();
-    qDebug() << "Login button Working";
+
+    if (_user.compare("") == 0) {
+            QMessageBox::warning(this,"Name Error","Please input a username.");
+            return;
+    }
+
     this->_reg.get()->setUsername(_user);
 
 
-    qDebug() << "Login button Working";
-
     if (ui->radioButton_online->isChecked()) {
-         qDebug() << "online button checked";
-        emit loginSuccess(UI::FormStatus::LOADFILE);
-        emit closeForm(UI::FormStatus::LOGIN);
+         QMessageBox::warning(this,"Unimplemented","Loading from file hasn't been implemented. offline is the only option. \nNote: I worked alone in this assignment and didn't have time to implement everything.");
+        /*emit loginSuccess(UI::FormStatus::LOADFILE);
+        emit closeForm(UI::FormStatus::LOGIN);*/
 
     } else if (ui->radioButton_offline->isChecked()){
-        qDebug() << "offline button checked";
        emit loginSuccess(UI::FormStatus::MAIN);
        emit closeForm(UI::FormStatus::LOGIN);
     }else {

@@ -6,7 +6,7 @@ namespace UI {
 
 enum FormStatus {LOGIN,MAIN,LOADFILE,VIEWASSETS,EDITCUSTODIAN,EDITASSETTYPE,EDITASSET,USERPROPERTY, NULLSTATUS};
 
-QString departments[] = {"Logistics","Maintenance","Operations"};
+static QString departments[] = {"Logistics","Maintenance","Operations"};
 
 
 }

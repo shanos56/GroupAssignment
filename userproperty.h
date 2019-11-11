@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <tuple>
 
 
 namespace core {

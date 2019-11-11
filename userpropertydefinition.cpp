@@ -72,14 +72,18 @@ std::shared_ptr<UserProperty> UserPropertyDefinition::newProperty(QObject *paren
  * success - tuple (true, "" )
  * failure - tuple (false, <failure message>)
  */
-std::tuple<bool, QString> UserPropertyDefinition::validate( std::shared_ptr<UserProperty> property) {
-    std::tuple<bool, QString> message;
+std::tuple<bool, QString> UserPropertyDefinition::validate( UserProperty& property) {
 
-    for (auto i : validators.values()) {
-        if (i->operator()(*property))
-            return std::make_tuple(false,i->failureMessage(*(property.get())));
+    if (!validators.isEmpty()) {
+        for (auto i : validators.values()) {
+            if (!i->operator()(property))
+                return std::make_tuple(false,i->failureMessage(property));
+        }
     }
-    return std::make_tuple(true,QString(""));
+    QString a  = "";
+
+    auto tu = std::tuple(true,a);
+    return tu;
 }
 
 bool UserPropertyDefinition::addValidator (QString name, std::shared_ptr<UserPropertyValidator> validator) {

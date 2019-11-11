@@ -14,16 +14,17 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    std::shared_ptr<AbstractAssetRegister> _reg;
+    std::shared_ptr<AbstractAssetRegister>& _reg;
+    std::shared_ptr<QDialog> _current;
 
     void fillList();
-    void updateList();
+
 
 public:
-    explicit MainWindow(std::shared_ptr<AbstractAssetRegister> reg, QWidget *parent = nullptr);
+    explicit MainWindow(std::shared_ptr<AbstractAssetRegister>& reg, QWidget *parent = nullptr);
     ~MainWindow();
 
-
+    void updateList();
     bool deleteCustodian();
     void editCustodian();
     void addCustodian();
@@ -36,12 +37,9 @@ public:
 signals:
     void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
     void closeForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS);
-    void openForm(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
+    void openForm2(const UI::FormStatus stat = UI::FormStatus::NULLSTATUS,QString id = "");
 
 private slots:
-    void on_AssetTypes_2_itemPressed(QListWidgetItem *item);
-
-    void on_AssetType_add_clicked();
 
     void on_addAssetType_button_clicked();
 

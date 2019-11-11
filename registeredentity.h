@@ -112,8 +112,12 @@ public slots:
      * signal when they are being deleted.
      * @param instance
      */
-    virtual void instanceDestroyed2( std::shared_ptr<RegisteredEntity>  instance){}
-    virtual void instanceDestroyed( QString id ){}
+    virtual void instanceDestroyed2( std::shared_ptr<RegisteredEntity>  instance){
+        instance.reset();
+    }
+    virtual void instanceDestroyed( QString id ){
+        id.clear();
+    }
 };
 
 }

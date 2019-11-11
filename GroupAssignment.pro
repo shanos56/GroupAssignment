@@ -42,6 +42,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         registeredentity.cpp \
+        tester.cpp \
         typeduserproperty.cpp \
         userproperty.cpp \
         userpropertydefinition.cpp \
@@ -66,6 +67,7 @@ HEADERS += \
         login.h \
         mainwindow.h \
         registeredentity.h \
+        tester.h \
         typeduserproperty.h \
         userproperty.h \
         userpropertydefinition.h \

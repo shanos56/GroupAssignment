@@ -54,7 +54,6 @@ std::shared_ptr<TypedUserProperty <QString>> Custodian::getPhoneNumber() {
  * false - invalid name
  */
 bool Custodian::setName(std::shared_ptr<TypedUserProperty <QString>> name) {
-
     if (name->validate()) {
         this->name = name->getValue();
         return true;

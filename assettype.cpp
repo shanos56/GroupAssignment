@@ -118,7 +118,7 @@ std::shared_ptr<UserPropertyDefinition> AssetType::getPropertyDefintion(QString 
  */
 std::shared_ptr<Asset> AssetType::newInstance(QString id) {
 
-   std::shared_ptr<Asset>a{new Asset(id,std::shared_ptr<AssetType>(this))};
+   auto a = std::make_shared<Asset>(id,std::shared_ptr<AssetType>(this));
    return a;
 }
 /**
@@ -208,4 +208,9 @@ void AssetType::instanceDestroyed(QString id) {
         }
 
     }
+}
+
+bool AssetType::addAsset(std::shared_ptr<Asset> asset) {
+    this->_instances.append(asset);
+    return true;
 }
